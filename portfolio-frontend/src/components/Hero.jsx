@@ -1,6 +1,6 @@
 import CodingSvg from '../assets/person-coding.svg';
 import DownloadButton from './DownloadButton';
-import * as Constants from '../Constants';
+import * as Constants from '../constants.jsx';
 
 const Hero = () => {
   const lines = Array.from({ length: 27 }, (_, i) => i + 1);
