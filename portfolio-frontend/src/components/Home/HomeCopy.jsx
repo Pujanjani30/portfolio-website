@@ -1,6 +1,6 @@
 import CodingSvg from '../assets/person-coding.svg';
 
-const Hero = () => {
+const Home = () => {
   const lines = Array.from({ length: 27 }, (_, i) => i + 1);
 
   return (
@@ -36,4 +36,4 @@ const Hero = () => {
   );
 };
 
-export default Hero;
+export default Home;
