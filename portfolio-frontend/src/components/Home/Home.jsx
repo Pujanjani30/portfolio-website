@@ -29,7 +29,7 @@ const Home = () => {
           <div className="text-left md:pt-2">
             <h2 className="text-xl">Hello! I am</h2>
             <h1 className="text-4xl lg:text-6xl font-bold">Pujan Jani</h1>
-            <p className="text-2xl mt-2">I am a <span className="text-blue-400">Backend Developer</span></p>
+            <p className="text-2xl mt-3">I am a <span className="text-blue-400">Backend Developer</span></p>
 
             <DownloadButton fileUrl="/Pujan_Jani_Resume.pdf" fileName="PujanJaniResume.pdf" />
 
