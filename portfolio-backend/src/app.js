@@ -1,9 +1,9 @@
+import 'dotenv/config';
 import express from 'express';
-import dotenv from 'dotenv';
 import cors from 'cors';
-import createApi from './api/v1';
+import createApi from './api/v1/index.js';
+import './db/index.js';
 
-dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 8000;
 

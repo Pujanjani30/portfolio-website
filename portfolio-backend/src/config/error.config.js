@@ -39,6 +39,11 @@ const ERRORS = {
     'DEFAULT_MESSAGE': 'authorization token not found.',
     'HTTP_CODE': 401
   },
+  'SOMETHING_WENT_WRONG': {
+    'CODE': 12,
+    'DEFAULT_MESSAGE': 'Something went worng. Please try again.',
+    'HTTP_CODE': 500
+  }
 }
 
 export default ERRORS;
