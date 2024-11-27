@@ -4,19 +4,23 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import {
   createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Outlet
-} from 'react-router-dom'
+}
+  from 'react-router-dom'
 import {
   Home, About, ComingSoon, ErrorPage, Introduction, Education, Skills, Experience, Certificates,
   AdminPanel, HomeAdmin, IntroductionAdmin, EducationAdmin, SkillsAdmin, ExperienceAdmin, CertificatesAdmin,
   ProjectsAdmin, Login, ProtectedRoute,
-} from './components/index.js'
+}
+  from './components/index.js'
+import UserContextProvider from './context/UserContextProvider.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />} errorElement={<ErrorPage />}>
+
+      {/* Public Routes */}
       <Route path="" element={<Home />} />
       <Route path="/about" element={<About />}>
-        {/* Nested Routes */}
         <Route index element={<Introduction />} />
         <Route path="introduction" element={<Introduction />} />
         <Route path="education" element={<Education />} />
@@ -28,10 +32,13 @@ const router = createBrowserRouter(
 
       <Route path="/admin/login" element={<Login />} />
 
+      {/* Admin Routes*/}
       <Route path="/admin" element={
-        <ProtectedRoute>
-          <AdminPanel />
-        </ProtectedRoute>
+        <UserContextProvider>
+          <ProtectedRoute>
+            <AdminPanel />
+          </ProtectedRoute>
+        </UserContextProvider>
       }>
         <Route index element={<HomeAdmin />} />
         <Route path="home" element={<HomeAdmin />} />
@@ -44,7 +51,6 @@ const router = createBrowserRouter(
         </Route>
         <Route path="projects" element={<ProjectsAdmin />} />
       </Route>
-      {/* <Route path="*" element={<ErrorPage />} /> */}
     </Route>
   )
 )

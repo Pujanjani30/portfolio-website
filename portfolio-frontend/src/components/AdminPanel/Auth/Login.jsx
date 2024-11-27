@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../../api/api.js';
+import UserContext from '../../../context/UserContext.js';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
@@ -9,13 +10,16 @@ export default function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  const { setUser } = useContext(UserContext);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
 
     try {
-      await login(email, password);
+      const user = await login(email, password);
+      setUser(user);
       navigate('/admin/home'); // Redirect to admin home after successful login
     } catch (err) {
       setError(err);

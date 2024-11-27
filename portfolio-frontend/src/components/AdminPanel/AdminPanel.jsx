@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink, Outlet } from "react-router-dom";
+import UserContext from "../../context/UserContext";
+import { logout } from "../../api/api";
+import { useNavigate } from "react-router-dom";
 
 function AdminPanel() {
+  const { user } = useContext(UserContext);
+  const navigate = useNavigate();
+
   const menuItems = [
     { path: "home", label: "Home" },
     {
@@ -30,8 +36,8 @@ function AdminPanel() {
               className="h-10 w-10 rounded-full object-cover"
             />
             <div>
-              <strong className="block text-sm font-medium">Admin Name</strong>
-              <span className="text-xs text-gray-400">admin@example.com</span>
+              <strong className="block text-sm font-medium">{user?.user_fullname || 'Name'}</strong>
+              <span className="text-xs text-gray-400">{user?.user_email || 'Email'}</span>
             </div>
           </div>
         </div>
@@ -103,6 +109,21 @@ function AdminPanel() {
             })}
           </ul>
         </nav>
+
+        {/* Logout Button */}
+        <div className="mt-6 w-full text-center">
+          <button
+            className="px-9 text-white py-2"
+            onClick={() => {
+              logout();
+              navigate('/admin/login')
+            }}
+          >
+            <i className="fa-solid fa-right-from-bracket me-2" />
+            Logout
+          </button>
+        </div>
+
       </div>
 
       {/* Main Content */}
