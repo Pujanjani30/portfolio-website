@@ -3,10 +3,12 @@ import './index.css'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import {
-  createBrowserRouter, createRoutesFromElements, Route, RouterProvider
+  createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Outlet
 } from 'react-router-dom'
 import {
   Home, About, ComingSoon, ErrorPage, Introduction, Education, Skills, Experience, Certificates,
+  AdminPanel, HomeAdmin, IntroductionAdmin, EducationAdmin, SkillsAdmin, ExperienceAdmin, CertificatesAdmin,
+  ProjectsAdmin, Login, ProtectedRoute,
 } from './components/index.js'
 
 const router = createBrowserRouter(
@@ -23,6 +25,25 @@ const router = createBrowserRouter(
         <Route path="certificates" element={<Certificates />} />
       </Route>
       <Route path="/projects" element={<ComingSoon />} />
+
+      <Route path="/admin/login" element={<Login />} />
+
+      <Route path="/admin" element={
+        <ProtectedRoute>
+          <AdminPanel />
+        </ProtectedRoute>
+      }>
+        <Route index element={<HomeAdmin />} />
+        <Route path="home" element={<HomeAdmin />} />
+        <Route path="about" element={<Outlet />}>
+          <Route path="introduction" element={<IntroductionAdmin />} />
+          <Route path="education" element={<EducationAdmin />} />
+          <Route path="skills" element={<SkillsAdmin />} />
+          <Route path="experience" element={<ExperienceAdmin />} />
+          <Route path="certificates" element={<CertificatesAdmin />} />
+        </Route>
+        <Route path="projects" element={<ProjectsAdmin />} />
+      </Route>
       {/* <Route path="*" element={<ErrorPage />} /> */}
     </Route>
   )

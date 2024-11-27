@@ -2,13 +2,13 @@
 import { successResponse, errorResponse } from '../utils/http-response.js'
 
 // service
-import * as userSerivce from '../services/user.service.js';
+import * as authSerivce from '../services/auth.service.js';
 
 const register = async (req, res) => {
   try {
     const data = Object.assign({}, req.body, req.params, req.query);
 
-    const response = await userSerivce.register(data);
+    const response = await authSerivce.register(data);
 
     successResponse({
       res,
@@ -25,7 +25,7 @@ const login = async (req, res) => {
   try {
     const data = Object.assign({}, req.body, req.params, req.query);
 
-    const response = await userSerivce.login(data);
+    const response = await authSerivce.login(data);
 
     successResponse({
       res,

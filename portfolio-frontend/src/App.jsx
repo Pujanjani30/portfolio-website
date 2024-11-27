@@ -1,11 +1,16 @@
 import { Header, Footer } from './components/index.js'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 
 function App() {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
   return (
-    <div className='min-h-screen'>
-      <Header />
-      <Outlet />
+    <div className='flex flex-col min-h-screen'>
+      {!isAdminRoute && <Header />}
+      <div className="flex-grow">
+        <Outlet />
+      </div>
       <Footer />
     </div>
   )
