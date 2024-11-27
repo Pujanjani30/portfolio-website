@@ -21,6 +21,21 @@ const register = async (req, res) => {
   }
 };
 
-const login = () => { };
+const login = async (req, res) => {
+  try {
+    const data = Object.assign({}, req.body, req.params, req.query);
+
+    const response = await userSerivce.login(data);
+
+    successResponse({
+      res,
+      message: 'Logged in successfully',
+      token: response.token,
+      data: response.user
+    })
+  } catch (error) {
+    errorResponse(res, error);
+  }
+};
 
 export { register, login };

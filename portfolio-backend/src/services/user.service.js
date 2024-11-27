@@ -22,6 +22,21 @@ const register = async (data) => {
   return { user, token }
 };
 
-const login = () => { };
+const login = async (data) => {
+  const user = await User.findOne({ user_email: data.email });
+  if (!user)
+    throw new Error('INVALID_CREDENTIALS');
+
+  const isVerified = await user.verifyPassword(data.password);
+  if (!isVerified)
+    throw new Error('INVALID_CREDENTIALS');
+
+  const token = await user.generateAccessToken()
+
+  user.user_password = undefined;
+
+  return { user, token }
+
+};
 
 export { register, login };
