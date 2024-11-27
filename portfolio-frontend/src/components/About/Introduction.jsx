@@ -2,7 +2,7 @@ import React from "react";
 
 const Introduction = () => {
   return (
-    <section className="bg-zinc-900 text-white flex p-6 min-h-full items-center justify-center">
+    <section className="bg-zinc-900 text-white flex min-h-full items-center justify-center">
       <div className="max-w-4xl">
         <h1 className="text-xl md:text-2xl font-bold mb-4">
           Hi, I’m <span className="text-amber-400">Pujan Jani</span> 👋
