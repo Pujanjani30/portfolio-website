@@ -28,6 +28,8 @@ const updateHomeDetails = async (req, res) => {
     if (profilePicLocalPath) {
       const profilePic = await uploadFile(profilePicLocalPath);
       data.profilePic = profilePic.url;
+    } else {
+      data.profilePic = "";
     }
 
     // Handle resume upload

@@ -1,33 +1,29 @@
 import React, { useState, useEffect } from "react";
+import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
+import * as Yup from "yup";
+import { getHomeDetails, updateHomeDetails } from '../../../api/api.js';
 
 function HomeAdmin() {
-  const [formData, setFormData] = useState({
+  const [initialData, setInitialData] = useState({
     name: "",
     position: "",
     email: "",
     profilePic: null,
     resume: null,
-    githubLink: "",
-    linkedinLink: "",
+    socials: [{ label: "GitHub", url: "" }, { label: "LinkedIn", url: "" }],
   });
 
-  const [links, setLinks] = useState([
-    { label: "GitHub", url: "" },
-    { label: "LinkedIn", url: "" },
-  ]);
-
-  const [initialData, setInitialData] = useState(null);
   const [isChanged, setIsChanged] = useState(false);
 
-  // Fetch data from the API on first load
+  // Fetch initial data from API
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/getUserDetails"); // Replace with your API endpoint
-        const data = await response.json();
-        setFormData(data);
-        setLinks(data.links || []);
-        setInitialData(data); // Save the fetched data to compare later
+        const data = await getHomeDetails();
+        setInitialData({
+          ...data,
+          socials: data.socials || [{ label: "GitHub", url: "" }, { label: "LinkedIn", url: "" }],
+        });
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -35,197 +31,261 @@ function HomeAdmin() {
     fetchData();
   }, []);
 
-  // Handle form field changes
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-    checkIfChanged();
-  };
-
-  // Handle file changes (for profile pic and resume)
-  const handleFileChange = (e) => {
-    const { name, files } = e.target;
-    setFormData({ ...formData, [name]: files[0] });
-    checkIfChanged();
-  };
-
-  // Handle link change (for dynamic links)
-  const handleLinkChange = (index, e) => {
-    const { name, value } = e.target;
-    const updatedLinks = [...links];
-    updatedLinks[index][name] = value;
-    setLinks(updatedLinks);
-    checkIfChanged();
-  };
-
-  // Add a new link
-  const addLink = () => {
-    setLinks([...links, { label: "", url: "" }]);
-    checkIfChanged();
-  };
-
-  // Remove a link
-  const removeLink = (index) => {
-    const updatedLinks = links.filter((_, i) => i !== index);
-    setLinks(updatedLinks);
-    checkIfChanged();
-  };
-
-  // Check if any changes were made
-  const checkIfChanged = () => {
-    // Compare formData and links with initialData
-    const isFormChanged = Object.keys(formData).some(
-      (key) => formData[key] !== initialData[key]
-    );
-    const areLinksChanged = links.some(
-      (link, index) => link.url !== initialData.links[index]?.url || link.label !== initialData.links[index]?.label
-    );
-    setIsChanged(isFormChanged || areLinksChanged);
-  };
+  // Validation schema using Yup
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required("Name is required"),
+    position: Yup.string().required("Position is required"),
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    profilePic: Yup.mixed().nullable(),
+    resume: Yup.mixed().nullable().required("Resume is required"),
+    socials: Yup.array().of(
+      Yup.object().shape({
+        label: Yup.string().required("Label is required"),
+        url: Yup.string().url("Invalid URL").required("URL is required"),
+      })
+    ),
+  });
 
   // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form data to be submitted:", formData, links);
-    // Example: You can integrate API here to save data in the future
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      const formData = new FormData();
+      formData.append("name", values.name);
+      formData.append("position", values.position);
+      formData.append("email", values.email);
+      if (values.profilePic)
+        formData.append("profilePic", values.profilePic);
+      if (values.resume)
+        formData.append("resume", values.resume);
+      formData.append("socials", JSON.stringify(values.socials));
+
+      await updateHomeDetails(formData); // Update home details using the provided API function
+      setIsChanged(false); // Reset form change status after successful submit
+    } catch (error) {
+      console.error("Error updating home details:", error);
+    } finally {
+      setSubmitting(false); // Reset submitting state
+    }
   };
 
   return (
     <div className="max-w-7xl mx-auto p-4 bg-zinc-900 text-white rounded-lg shadow-lg min-h-screen flex flex-col">
       <h1 className="text-3xl font-semibold mb-6">Edit Home Page Details</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-6 flex-grow">
-        {/* Name Field */}
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1">
-            <label htmlFor="name" className="block text-sm font-medium">
-              Name
-            </label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              value={formData.name}
-              onChange={handleInputChange}
-              required
-              className="mt-1 block w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-            />
-          </div>
+      <Formik
+        enableReinitialize
+        initialValues={initialData}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ values, setFieldValue, isSubmitting, dirty, resetForm }) => {
+          useEffect(() => {
+            setIsChanged(dirty); // Update isChanged state based on dirty
+          }, [dirty]);
 
-          {/* Position Field */}
-          <div className="flex-1">
-            <label htmlFor="position" className="block text-sm font-medium">
-              Position
-            </label>
-            <input
-              id="position"
-              name="position"
-              type="text"
-              value={formData.position}
-              onChange={handleInputChange}
-              required
-              className="mt-1 block w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-            />
-          </div>
-        </div>
+          const cancelChanges = () => {
+            resetForm({ values: initialData });
+          };
 
-        {/* Email Field */}
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium">
-            Email
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-            className="mt-1 block w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-          />
-        </div>
+          return (
+            <Form className="space-y-6 flex-grow">
+              {/* Name and Position */}
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex-1">
+                  <label htmlFor="name" className="block text-sm font-medium">
+                    Name
+                  </label>
+                  <Field
+                    name="name"
+                    type="text"
+                    className="mt-1 block w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                  />
+                  <ErrorMessage name="name" component="div" className="text-red-500 text-sm" />
+                </div>
+                <div className="flex-1">
+                  <label htmlFor="position" className="block text-sm font-medium">
+                    Position
+                  </label>
+                  <Field
+                    name="position"
+                    type="text"
+                    className="mt-1 block w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                  />
+                  <ErrorMessage name="position" component="div" className="text-red-500 text-sm" />
+                </div>
+              </div>
 
-        {/* Profile Picture */}
-        <div>
-          <label htmlFor="profilePic" className="block text-sm font-medium">
-            Profile Picture
-          </label>
-          <input
-            id="profilePic"
-            name="profilePic"
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="mt-1 block w-full text-sm border border-gray-300 rounded-lg file:border-0 file:px-4 file:py-2 file:bg-blue-500 file:text-white focus:outline-none"
-          />
-        </div>
+              {/* Email */}
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium">
+                  Email
+                </label>
+                <Field
+                  name="email"
+                  type="email"
+                  className="mt-1 block w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                />
+                <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
+              </div>
 
-        {/* Resume */}
-        <div>
-          <label htmlFor="resume" className="block text-sm font-medium">
-            Resume (PDF)
-          </label>
-          <input
-            id="resume"
-            name="resume"
-            type="file"
-            accept="application/pdf"
-            onChange={handleFileChange}
-            className="mt-1 block w-full text-sm border border-gray-300 rounded-lg file:border-0 file:px-4 file:py-2 file:bg-blue-500 file:text-white focus:outline-none"
-          />
-        </div>
+              {/* Profile Picture and Resume in One Row */}
+              <div className="flex gap-6">
+                {/* Profile Picture */}
+                <div className="flex-1">
+                  <label htmlFor="profilePic" className="block text-sm font-medium">
+                    Profile Picture
+                  </label>
+                  {values.profilePic ? (
+                    <div className="mt-1">
+                      <img
+                        src={values.profilePic}
+                        alt="Profile Preview"
+                        className="w-32 h-32 object-cover rounded-lg"
+                      />
+                      <p className="text-blue-500 mt-2">
+                        <a href={values.profilePic} target="_blank" rel="noopener noreferrer">
+                          View Profile Picture
+                        </a>
+                      </p>
+                      <div className="flex gap-4 mt-2">
+                        <button
+                          type="button"
+                          onClick={() => setFieldValue("profilePic", null)}
+                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                        >
+                          Remove
+                        </button>
+                        <button
+                          type="button"
+                          // onClick={() => }
+                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                        >
+                          Update
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <input
+                      id="profilePic"
+                      name="profilePic"
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        setFieldValue("profilePic", file);
+                      }}
+                      className="mt-1 block w-full text-sm border border-gray-300 rounded-lg file:border-0 file:px-4 file:py-2 file:bg-blue-500 file:text-white focus:outline-none"
+                    />
+                  )}
+                </div>
 
-        {/* Dynamic Links (GitHub, LinkedIn, etc.) */}
-        <div>
-          <h3 className="text-xl font-semibold pb-3">Social Links</h3>
-          {links.map((link, index) => (
-            <div key={index} className="flex items-center gap-4 mb-4">
-              <input
-                type="text"
-                name="label"
-                value={link.label}
-                onChange={(e) => handleLinkChange(index, e)}
-                placeholder="Link Label (e.g., GitHub)"
-                className="px-4 py-2 text-sm border border-gray-300 rounded-lg flex-1 text-black"
-              />
-              <input
-                type="url"
-                name="url"
-                value={link.url}
-                onChange={(e) => handleLinkChange(index, e)}
-                placeholder="URL"
-                className="px-4 py-2 text-sm border border-gray-300 rounded-lg flex-1 text-black"
-              />
-              <button
-                type="button"
-                onClick={() => removeLink(index)}
-                className="text-red-500 hover:text-red-700"
-              >
-                Remove
-              </button>
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={addLink}
-            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-          >
-            + Add Link
-          </button>
-        </div>
+                {/* Resume */}
+                <div className="flex-1">
+                  <label htmlFor="resume" className="block text-sm font-medium">
+                    Resume (PDF)
+                  </label>
+                  {values.resume ? (
+                    <div className="mt-1">
+                      <p className="text-blue-500 mt-2">
+                        <a href={values.resume} target="_blank" rel="noopener noreferrer">
+                          View Resume
+                        </a>
+                      </p>
+                      <div className="flex gap-4 mt-2">
+                        {/* <button
+                          type="button"
+                          onClick={() => setFieldValue("resume", null)}
+                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                        >
+                          Remove
+                        </button> */}
+                        <button
+                          type="button"
+                          onClick={() => document.getElementById("resume").click()}
+                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                        >
+                          Update
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <input
+                      id="resume"
+                      name="resume"
+                      type="file"
+                      accept="application/pdf"
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        setFieldValue("resume", file);
+                      }}
+                      className="mt-1 block w-full text-sm border border-gray-300 rounded-lg file:border-0 file:px-4 file:py-2 file:bg-blue-500 file:text-white focus:outline-none"
+                    />
+                  )}
+                  <ErrorMessage name="resume" component="div" className="text-red-500 text-sm" />
+                </div>
+              </div>
 
-        {/* Submit Button */}
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            className={`px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 ${!isChanged ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-            disabled={!isChanged}
-          >
-            Save
-          </button>
-        </div>
-      </form>
+
+              {/* Social Links */}
+              <div>
+                <h3 className="text-xl font-semibold pb-3">Social Links</h3>
+                <FieldArray name="socials">
+                  {({ remove, push }) => (
+                    <div>
+                      {values.socials.map((social, index) => (
+                        <div key={index} className="flex items-center gap-4 mb-4">
+                          <Field
+                            name={`socials[${index}].label`}
+                            placeholder="Label (e.g., GitHub)"
+                            className="px-4 py-2 text-sm border border-gray-300 rounded-lg flex-1 text-black"
+                          />
+                          <Field
+                            name={`socials[${index}].url`}
+                            placeholder="URL"
+                            className="px-4 py-2 text-sm border border-gray-300 rounded-lg flex-1 text-black"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setFieldValue("profilePic", null)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      ))}
+                      <button
+                        type="button"
+                        onClick={() => push({ label: "", url: "" })}
+                        className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                      >
+                        + Add Link
+                      </button>
+                    </div>
+                  )}
+                </FieldArray>
+              </div>
+
+              {/* Submit Button */}
+              <div className="flex justify-end">
+                {isChanged && <button
+                  type="button"
+                  onClick={() => cancelChanges()}
+                  className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 mr-4"
+                >
+                  Cancel
+                </button>}
+                <button
+                  type="submit"
+                  className={`px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 ${!isChanged || isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
+                  disabled={!isChanged || isSubmitting}
+                >
+                  {isSubmitting ? "Saving..." : "Save"}
+                </button>
+              </div>
+            </Form>
+          );
+        }}
+      </Formik>
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 const BASE_URL = 'http://localhost:8000/api/v1';
 
@@ -48,4 +47,32 @@ const logout = () => {
   setAuthorizationHeader();
 };
 
-export { login, logout };
+const getHomeDetails = async () => {
+  try {
+    const response = await api.get('/home');
+
+    return response.data.data;
+  }
+  catch (error) {
+    throw error?.response?.data?.message || 'An error occurred';
+  }
+};
+
+const updateHomeDetails = async (data) => {
+  try {
+    setAuthorizationHeader(); // Authorization header required for admin routes
+
+    const response = await api.post('/admin/home', data, {
+      headers: {
+        'Content-Type': 'multipart/form-data', // update headers for file uploads
+      },
+    });
+
+    return response.data.data;
+  }
+  catch (error) {
+    throw error?.response?.data?.message || 'An error occurred';
+  }
+}
+
+export { login, logout, getHomeDetails, updateHomeDetails };
