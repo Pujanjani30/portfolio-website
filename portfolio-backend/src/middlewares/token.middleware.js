@@ -1,11 +1,12 @@
 import jwt from 'jsonwebtoken';
+import { errorResponse } from '../utils/http-response.js';
 
 const verifyToken = (req, res, next) => {
   try {
-    if (!req.headers.Authorization)
+    if (!req.headers.authorization)
       throw new Error("AUTH_NOT_FOUND");
 
-    const auth = req.headers.Authorization.split("Bearer ")[1];
+    const auth = req.headers.authorization.split("Bearer ")[1];
 
     jwt.verify(auth, process.env.ACCESS_TOKEN_SECRET, (err, decodedData) => {
       if (err) {

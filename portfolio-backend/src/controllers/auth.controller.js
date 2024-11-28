@@ -1,5 +1,5 @@
 // uitls
-import { successResponse, errorResponse } from '../utils/http-response.js'
+import { successResponse, errorResponse } from '../utils/http-response.js';
 
 // service
 import * as authSerivce from '../services/auth.service.js';
