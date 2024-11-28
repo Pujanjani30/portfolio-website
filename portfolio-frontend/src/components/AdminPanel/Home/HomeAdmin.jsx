@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
 import * as Yup from "yup";
 import { getHomeDetails, updateHomeDetails } from '../../../api/api.js';
+import { confirmAlert, successAlert, errorAlert } from '../../../utils/alert.js';
 
 function HomeAdmin() {
   const [initialData, setInitialData] = useState({
@@ -49,6 +50,9 @@ function HomeAdmin() {
   // Handle form submission
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
+      const confirm = await confirmAlert("Are you sure you want to save changes?");
+      if (!confirm.isConfirmed) return;
+
       const formData = new FormData();
       formData.append("name", values.name);
       formData.append("position", values.position);
@@ -61,8 +65,11 @@ function HomeAdmin() {
 
       await updateHomeDetails(formData); // Update home details using the provided API function
       setIsChanged(false); // Reset form change status after successful submit
+
+      successAlert("Saved changes successfully!");
     } catch (error) {
       console.error("Error updating home details:", error);
+      errorAlert("An error occurred! Please try again.");
     } finally {
       setSubmitting(false); // Reset submitting state
     }
@@ -246,7 +253,7 @@ function HomeAdmin() {
                           />
                           <button
                             type="button"
-                            onClick={() => setFieldValue("profilePic", null)}
+                            onClick={() => remove(index)}
                             className="text-red-500 hover:text-red-700"
                           >
                             Remove
