@@ -35,12 +35,11 @@ const updateHomeDetails = async (req, res) => {
       data.resume = resume.url;
     }
 
-    const response = await homeService.updateHomeDetails(data);
+    await homeService.updateHomeDetails(data);
 
     successResponse({
       res,
-      message: 'Home details updated successfully',
-      data: response
+      message: 'Home details updated successfully'
     })
   } catch (error) {
     errorResponse(res, error);

@@ -15,7 +15,7 @@ const updateHomeDetails = async (data) => {
   }
   await Home.updateOne({}, data);
 
-  return home;
+  return;
 };
 
 export { getHomeDetails, updateHomeDetails };

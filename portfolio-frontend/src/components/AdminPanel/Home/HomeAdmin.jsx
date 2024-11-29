@@ -48,11 +48,16 @@ function HomeAdmin() {
       formData.append("name", values.name);
       formData.append("position", values.position);
       formData.append("email", values.email);
-      if (values.profilePic)
+      if (values.profilePic && typeof values.profilePic !== "string") {
         formData.append("profilePic", values.profilePic);
+      } else {
+        formData.append("profilePic", ""); // Explicitly indicate removal
+      }
       if (values.resume)
         formData.append("resume", values.resume);
       formData.append("socials", JSON.stringify(values.socials));
+      console.log("Values:", values);
+      console.log("Form Data:", formData);
 
       await updateHomeDetails(formData); // Update home details using the provided API function
 
@@ -174,7 +179,7 @@ function HomeAdmin() {
                           onClick={async () => {
                             const confirm = await confirmAlert("Are you sure you want to remove the profile picture?");
                             if (confirm.isConfirmed) {
-                              setFieldValue("profilePic", null);
+                              setFieldValue("profilePic", "");
                             }
                           }}
                           className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
