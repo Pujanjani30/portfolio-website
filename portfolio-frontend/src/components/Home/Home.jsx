@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import CodingSvg from '../../assets/person-coding.svg';
-import { DownloadButton } from '../index.js';
 import { getHomeDetails } from '../../api/api.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLink } from '@fortawesome/free-solid-svg-icons';
+import { icons } from '../../utils/icons.js';
+// import { DownloadButton } from '../index.js';
 
 const Home = () => {
   const [homeDetails, setHomeDetails] = useState({});
@@ -48,7 +51,15 @@ const Home = () => {
             <h1 className="text-4xl lg:text-6xl font-bold">{homeDetails.name}</h1>
             <p className="text-2xl mt-3">I am a <span className="text-blue-400">{homeDetails.position}</span></p>
 
-            <DownloadButton fileUrl="/Pujan_Jani_Resume.pdf" fileName="PujanJaniResume.pdf" />
+            {/* <DownloadButton fileUrl={homeDetails.resume} fileName="PujanJaniResume.pdf" /> */}
+
+            <button
+              className={`bg-blue-500 text-white px-4 py-2 mt-4 rounded-md hover:bg-blue-600 transition ${!homeDetails.resume ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
+              onClick={() => window.open(homeDetails.resume, '_blank')}
+            >
+              Resume
+            </button>
 
             <div className="flex gap-4 text-2xl mt-4">
               <button onClick={() => window.location = `mailto:${homeDetails.email}`}><i className="fa-solid fa-envelope"></i></button>
@@ -61,10 +72,12 @@ const Home = () => {
                   rel="noopener noreferrer"
                   title={social.label} // Tooltip for clarity
                 >
-                  {social.label === "GitHub" && <i className="fa-brands fa-github"></i>}
-                  {social.label === "LinkedIn" && <i className="fa-brands fa-linkedin"></i>}
-                  {/* Default fallback icon */}
-                  {!["GitHub", "LinkedIn"].includes(social.label) && <i className="fa-solid fa-link"></i>}
+                  {/* Dynamically render the icon */}
+                  {social.icon && (
+                    <FontAwesomeIcon icon={icons[social.icon]} />
+                  )}
+                  {/* Optional fallback for missing icons */}
+                  {!social.icon && <FontAwesomeIcon icon={faLink} />}
                 </a>
               ))}
             </div>

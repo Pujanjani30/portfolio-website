@@ -3,7 +3,7 @@ import './index.css'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import {
-  createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Outlet
+  createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Outlet, Navigate
 }
   from 'react-router-dom'
 import {
@@ -19,9 +19,10 @@ const router = createBrowserRouter(
     <Route path="/" element={<App />} errorElement={<ErrorPage />}>
 
       {/* Public Routes */}
-      <Route path="" element={<Home />} />
+      <Route index element={<Navigate to='home' replace />} />
+      <Route path="/home" element={<Home />} />
       <Route path="/about" element={<About />}>
-        <Route index element={<Introduction />} />
+        <Route index element={<Navigate to='introduction' replace />} />
         <Route path="introduction" element={<Introduction />} />
         <Route path="education" element={<Education />} />
         <Route path="skills" element={<Skills />} />
@@ -40,7 +41,7 @@ const router = createBrowserRouter(
           </ProtectedRoute>
         </UserContextProvider>
       }>
-        <Route index element={<HomeAdmin />} />
+        <Route index element={<Navigate to='home' replace />} />
         <Route path="home" element={<HomeAdmin />} />
         <Route path="about" element={<Outlet />}>
           <Route path="introduction" element={<IntroductionAdmin />} />

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
 import { getHomeDetails, updateHomeDetails } from '../../../api/api.js';
-import { confirmAlert, successAlert, errorAlert } from '../../../utils/alert.js';
 import { HomeAdminValidationSchema } from "../../../schemas/validationSchemas.js";
+import { confirmAlert, successAlert, errorAlert } from '../../../utils/alert.js';
+import { icons } from '../../../utils/icons.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Select from 'react-select';
 
 function HomeAdmin() {
   const [initialData, setInitialData] = useState({
@@ -11,8 +14,21 @@ function HomeAdmin() {
     email: "",
     profilePic: null,
     resume: null,
-    socials: [{ label: "GitHub", url: "" }, { label: "LinkedIn", url: "" }],
+    socials: [
+      { label: "GitHub", url: "", icon: icons.faGithub },
+      { label: "LinkedIn", url: "", icon: icons.faLinkedin }
+    ],
   });
+
+  const iconOptions = Object.keys(icons).map(iconKey => ({
+    value: iconKey,
+    label: (
+      <div className="flex items-center gap-2">
+        <FontAwesomeIcon icon={icons[iconKey]} className="mr-2" />
+        {iconKey.replace('fa', '')}
+      </div>
+    )
+  }));
 
   const [isChanged, setIsChanged] = useState(false);
   const [isUpdatingProfilePic, setIsUpdatingProfilePic] = useState(false);
@@ -25,7 +41,10 @@ function HomeAdmin() {
         const data = await getHomeDetails();
         setInitialData({
           ...data,
-          socials: data.socials || [{ label: "GitHub", url: "" }, { label: "LinkedIn", url: "" }],
+          socials: data.socials || [
+            { label: "GitHub", url: "", icon: icons.faGithub },
+            { label: "LinkedIn", url: "", icon: icons.faLinkedin }
+          ],
         });
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -56,8 +75,8 @@ function HomeAdmin() {
       if (values.resume)
         formData.append("resume", values.resume);
       formData.append("socials", JSON.stringify(values.socials));
-      console.log("Values:", values);
-      console.log("Form Data:", formData);
+
+      console.log(values.socials);
 
       await updateHomeDetails(formData); // Update home details using the provided API function
 
@@ -230,13 +249,6 @@ function HomeAdmin() {
                         </a>
                       </p>
                       <div className="flex gap-4 mt-2">
-                        {/* <button
-                          type="button"
-                          onClick={() => setFieldValue("resume", null)}
-                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-                        >
-                          Remove
-                        </button> */}
                         <button
                           type="button"
                           onClick={() => setIsUpdatingResume(true)}
@@ -287,6 +299,7 @@ function HomeAdmin() {
                       {values.socials.map((social, index) => (
                         <div key={index} className="flex items-center gap-4 mb-4">
                           <div className="flex-1">
+                            <label className="block text-sm font-medium">Name</label>
                             <Field
                               name={`socials[${index}].label`}
                               placeholder="Label (e.g., GitHub)"
@@ -299,6 +312,7 @@ function HomeAdmin() {
                             />
                           </div>
                           <div className="flex-1">
+                            <label className="block text-sm font-medium">URL</label>
                             <Field
                               name={`socials[${index}].url`}
                               placeholder="URL"
@@ -308,6 +322,24 @@ function HomeAdmin() {
                               name={`socials[${index}].url`}
                               component="div"
                               className="text-red-500 text-sm"
+                            />
+                          </div>
+                          <div className="flex-1">
+                            {/* Icon Selector using react-select */}
+                            <label className="block text-sm font-medium">Select Icon</label>
+                            <Select
+                              options={iconOptions}
+                              value={iconOptions.find(option => option.value === values.socials[index].icon)}
+                              onChange={selectedOption => {
+                                setFieldValue(`socials[${index}].icon`, selectedOption.value);
+                              }}
+                              getOptionLabel={e => (
+                                <div className="flex items-center gap-2">
+                                  <FontAwesomeIcon icon={icons[e.value]} className="mr-2" />
+                                  {e.value.replace('fa', '')}
+                                </div>
+                              )}
+                              className="text-black"
                             />
                           </div>
                           <button
@@ -321,7 +353,7 @@ function HomeAdmin() {
                       ))}
                       <button
                         type="button"
-                        onClick={() => push({ label: "", url: "" })}
+                        onClick={() => push({ label: "", url: "", icon: "" })} // Default icon can be set
                         className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
                       >
                         + Add Link
