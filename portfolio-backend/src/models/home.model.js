@@ -11,7 +11,12 @@ const socialLinkSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-});
+  icon: {
+    type: String,
+    required: true,
+    trim: true,
+  }
+}, { _id: false });
 
 const homeSchema = new mongoose.Schema({
   name: {
