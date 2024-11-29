@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
-import * as Yup from "yup";
 import { getHomeDetails, updateHomeDetails } from '../../../api/api.js';
 import { confirmAlert, successAlert, errorAlert } from '../../../utils/alert.js';
+import { HomeAdminValidationSchema } from "../../../schemas/validationSchemas.js";
 
 function HomeAdmin() {
   const [initialData, setInitialData] = useState({
@@ -15,6 +15,8 @@ function HomeAdmin() {
   });
 
   const [isChanged, setIsChanged] = useState(false);
+  const [isUpdatingProfilePic, setIsUpdatingProfilePic] = useState(false);
+  const [isUpdatingResume, setIsUpdatingResume] = useState(false);
 
   // Fetch initial data from API
   useEffect(() => {
@@ -32,24 +34,13 @@ function HomeAdmin() {
     fetchData();
   }, []);
 
-  // Validation schema using Yup
-  const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Name is required"),
-    position: Yup.string().required("Position is required"),
-    email: Yup.string().email("Invalid email").required("Email is required"),
-    profilePic: Yup.mixed().nullable(),
-    resume: Yup.mixed().nullable().required("Resume is required"),
-    socials: Yup.array().of(
-      Yup.object().shape({
-        label: Yup.string().required("Label is required"),
-        url: Yup.string().url("Invalid URL").required("URL is required"),
-      })
-    ),
-  });
-
   // Handle form submission
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
+      const filteredSocials = values.socials.filter(
+        social => social.label.trim() !== '' && social.url.trim() !== ''
+      );
+
       const confirm = await confirmAlert("Are you sure you want to save changes?");
       if (!confirm.isConfirmed) return;
 
@@ -64,11 +55,17 @@ function HomeAdmin() {
       formData.append("socials", JSON.stringify(values.socials));
 
       await updateHomeDetails(formData); // Update home details using the provided API function
+
       setIsChanged(false); // Reset form change status after successful submit
+
+      // Update initialData with the submitted values
+      setInitialData(prevData => ({
+        ...values,
+        socials: filteredSocials
+      }));
 
       successAlert("Saved changes successfully!");
     } catch (error) {
-      console.error("Error updating home details:", error);
       errorAlert("An error occurred! Please try again.");
     } finally {
       setSubmitting(false); // Reset submitting state
@@ -82,16 +79,26 @@ function HomeAdmin() {
       <Formik
         enableReinitialize
         initialValues={initialData}
-        validationSchema={validationSchema}
+        validationSchema={HomeAdminValidationSchema}
         onSubmit={handleSubmit}
+        validateOnBlur={true}
       >
         {({ values, setFieldValue, isSubmitting, dirty, resetForm }) => {
           useEffect(() => {
-            setIsChanged(dirty); // Update isChanged state based on dirty
-          }, [dirty]);
+            // Check if form data has changed
+            const isFormChanged = Object.keys(initialData).some(key => {
+              if (key === 'socials') {
+                return JSON.stringify(initialData[key]) !== JSON.stringify(values[key]);
+              }
+              return initialData[key] !== values[key];
+            });
+
+            setIsChanged(isFormChanged);
+          }, [values, initialData, dirty]);
 
           const cancelChanges = () => {
             resetForm({ values: initialData });
+            setIsChanged(false);
           };
 
           return (
@@ -135,14 +142,14 @@ function HomeAdmin() {
                 <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
               </div>
 
-              {/* Profile Picture and Resume in One Row */}
               <div className="flex gap-6">
+
                 {/* Profile Picture */}
                 <div className="flex-1">
                   <label htmlFor="profilePic" className="block text-sm font-medium">
                     Profile Picture
                   </label>
-                  {values.profilePic ? (
+                  {values.profilePic && !isUpdatingProfilePic ? (
                     <div className="mt-1">
                       <img
                         src={values.profilePic}
@@ -157,32 +164,51 @@ function HomeAdmin() {
                       <div className="flex gap-4 mt-2">
                         <button
                           type="button"
-                          onClick={() => setFieldValue("profilePic", null)}
-                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-                        >
-                          Remove
-                        </button>
-                        <button
-                          type="button"
-                          // onClick={() => }
+                          onClick={() => setIsUpdatingProfilePic(true)}
                           className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                         >
                           Update
                         </button>
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            const confirm = await confirmAlert("Are you sure you want to remove the profile picture?");
+                            if (confirm.isConfirmed) {
+                              setFieldValue("profilePic", null);
+                            }
+                          }}
+                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                        >
+                          Remove
+                        </button>
                       </div>
                     </div>
                   ) : (
-                    <input
-                      id="profilePic"
-                      name="profilePic"
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => {
-                        const file = e.target.files[0];
-                        setFieldValue("profilePic", file);
-                      }}
-                      className="mt-1 block w-full text-sm border border-gray-300 rounded-lg file:border-0 file:px-4 file:py-2 file:bg-blue-500 file:text-white focus:outline-none"
-                    />
+                    <div className="mt-1">
+                      <input
+                        id="profilePic"
+                        name="profilePic"
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          setFieldValue("profilePic", file);
+                        }}
+                        className="mt-1 block w-full text-sm border border-gray-300 rounded-lg file:border-0 file:px-4 file:py-2 file:bg-blue-500 file:text-white focus:outline-none mb-2"
+                      />
+                      {isUpdatingProfilePic ? (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsUpdatingProfilePic(false);
+                            setFieldValue("profilePic", initialData.profilePic);
+                          }}
+                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                        >
+                          Cancel
+                        </button>
+                      ) : null}
+                    </div>
                   )}
                 </div>
 
@@ -191,7 +217,7 @@ function HomeAdmin() {
                   <label htmlFor="resume" className="block text-sm font-medium">
                     Resume (PDF)
                   </label>
-                  {values.resume ? (
+                  {values.resume && !isUpdatingResume ? (
                     <div className="mt-1">
                       <p className="text-blue-500 mt-2">
                         <a href={values.resume} target="_blank" rel="noopener noreferrer">
@@ -208,7 +234,7 @@ function HomeAdmin() {
                         </button> */}
                         <button
                           type="button"
-                          onClick={() => document.getElementById("resume").click()}
+                          onClick={() => setIsUpdatingResume(true)}
                           className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                         >
                           Update
@@ -216,17 +242,31 @@ function HomeAdmin() {
                       </div>
                     </div>
                   ) : (
-                    <input
-                      id="resume"
-                      name="resume"
-                      type="file"
-                      accept="application/pdf"
-                      onChange={(e) => {
-                        const file = e.target.files[0];
-                        setFieldValue("resume", file);
-                      }}
-                      className="mt-1 block w-full text-sm border border-gray-300 rounded-lg file:border-0 file:px-4 file:py-2 file:bg-blue-500 file:text-white focus:outline-none"
-                    />
+                    <div className="mt-1">
+                      <input
+                        id="resume"
+                        name="resume"
+                        type="file"
+                        accept="application/pdf"
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          setFieldValue("resume", file);
+                        }}
+                        className="mt-1 block w-full text-sm border border-gray-300 rounded-lg file:border-0 file:px-4 file:py-2 file:bg-blue-500 file:text-white focus:outline-none mb-2"
+                      />
+                      {isUpdatingResume ? (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsUpdatingResume(false);
+                            setFieldValue("resume", initialData.resume);
+                          }}
+                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                        >
+                          Cancel
+                        </button>
+                      ) : null}
+                    </div>
                   )}
                   <ErrorMessage name="resume" component="div" className="text-red-500 text-sm" />
                 </div>
@@ -241,16 +281,30 @@ function HomeAdmin() {
                     <div>
                       {values.socials.map((social, index) => (
                         <div key={index} className="flex items-center gap-4 mb-4">
-                          <Field
-                            name={`socials[${index}].label`}
-                            placeholder="Label (e.g., GitHub)"
-                            className="px-4 py-2 text-sm border border-gray-300 rounded-lg flex-1 text-black"
-                          />
-                          <Field
-                            name={`socials[${index}].url`}
-                            placeholder="URL"
-                            className="px-4 py-2 text-sm border border-gray-300 rounded-lg flex-1 text-black"
-                          />
+                          <div className="flex-1">
+                            <Field
+                              name={`socials[${index}].label`}
+                              placeholder="Label (e.g., GitHub)"
+                              className="px-4 py-2 text-sm border border-gray-300 rounded-lg w-full text-black"
+                            />
+                            <ErrorMessage
+                              name={`socials[${index}].label`}
+                              component="div"
+                              className="text-red-500 text-sm"
+                            />
+                          </div>
+                          <div className="flex-1">
+                            <Field
+                              name={`socials[${index}].url`}
+                              placeholder="URL"
+                              className="px-4 py-2 text-sm border border-gray-300 rounded-lg w-full text-black"
+                            />
+                            <ErrorMessage
+                              name={`socials[${index}].url`}
+                              component="div"
+                              className="text-red-500 text-sm"
+                            />
+                          </div>
                           <button
                             type="button"
                             onClick={() => remove(index)}
@@ -276,7 +330,7 @@ function HomeAdmin() {
               <div className="flex justify-end">
                 {isChanged && <button
                   type="button"
-                  onClick={() => cancelChanges()}
+                  onClick={cancelChanges}
                   className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 mr-4"
                 >
                   Cancel

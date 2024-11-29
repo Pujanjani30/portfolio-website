@@ -1,9 +1,26 @@
+import React, { useState, useEffect } from 'react';
 import CodingSvg from '../../assets/person-coding.svg';
-import * as Constants from '../../constants.js';
 import { DownloadButton } from '../index.js';
+import { getHomeDetails } from '../../api/api.js';
 
 const Home = () => {
+  const [homeDetails, setHomeDetails] = useState({});
+
   const lines = Array.from({ length: 27 }, (_, i) => i + 1);
+
+  useEffect(() => {
+    const fetchHomeDetails = async () => {
+      try {
+        const data = await getHomeDetails();
+        setHomeDetails(data);
+      }
+      catch (error) {
+        console.error('Error fetching home details:', error);
+      }
+    };
+
+    fetchHomeDetails();
+  }, []);
 
   return (
     <div className="bg-zinc-900 text-white min-h-[90.5vh]">
@@ -28,15 +45,28 @@ const Home = () => {
         <div className="grid col-span-11 justify-center items-center md:col-span-11 md:grid-cols-2 md:items-center">
           <div className="text-left md:pt-2">
             <h2 className="text-xl">Hello! I am</h2>
-            <h1 className="text-4xl lg:text-6xl font-bold">Pujan Jani</h1>
-            <p className="text-2xl mt-3">I am a <span className="text-blue-400">Backend Developer</span></p>
+            <h1 className="text-4xl lg:text-6xl font-bold">{homeDetails.name}</h1>
+            <p className="text-2xl mt-3">I am a <span className="text-blue-400">{homeDetails.position}</span></p>
 
             <DownloadButton fileUrl="/Pujan_Jani_Resume.pdf" fileName="PujanJaniResume.pdf" />
 
             <div className="flex gap-4 text-2xl mt-4">
-              <button onClick={() => window.location = `mailto:${Constants.EMAIL_URL}`}><i className="fa-solid fa-envelope"></i></button>
-              <a href={Constants.LINKEDIN_URL}><i className="fa-brands fa-linkedin"></i></a>
-              <a href={Constants.GITHUB_URL}><i className="fa-brands fa-github"></i></a>
+              <button onClick={() => window.location = `mailto:${homeDetails.email}`}><i className="fa-solid fa-envelope"></i></button>
+
+              {homeDetails.socials?.map((social, index) => (
+                <a
+                  key={social._id}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={social.label} // Tooltip for clarity
+                >
+                  {social.label === "GitHub" && <i className="fa-brands fa-github"></i>}
+                  {social.label === "LinkedIn" && <i className="fa-brands fa-linkedin"></i>}
+                  {/* Default fallback icon */}
+                  {!["GitHub", "LinkedIn"].includes(social.label) && <i className="fa-solid fa-link"></i>}
+                </a>
+              ))}
             </div>
 
           </div>

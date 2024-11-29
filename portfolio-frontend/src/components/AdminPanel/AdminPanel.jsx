@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
 import UserContext from "../../context/UserContext";
 import { logout } from "../../api/api";
-import { useNavigate } from "react-router-dom";
 
 function AdminPanel() {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const menuItems = [
     { path: "home", label: "Home" },
@@ -30,11 +30,6 @@ function AdminPanel() {
         {/* Profile Section */}
         <div className="p-4 border-b border-gray-700">
           <div className="flex items-center gap-2">
-            <img
-              alt="Profile"
-              src="https://via.placeholder.com/40"
-              className="h-10 w-10 rounded-full object-cover"
-            />
             <div>
               <strong className="block text-sm font-medium">{user?.user_fullname || 'Name'}</strong>
               <span className="text-xs text-gray-400">{user?.user_email || 'Email'}</span>
@@ -95,7 +90,8 @@ function AdminPanel() {
                     <NavLink
                       to={item.path}
                       className={({ isActive }) =>
-                        `block rounded-lg px-4 py-2 text-sm font-medium ${isActive
+                        `block rounded-lg px-4 py-2 text-sm font-medium 
+                         ${isActive || (location.pathname === '/admin' && item.path === 'home')
                           ? "bg-zinc-800 text-white"
                           : "text-gray-500 hover:bg-gray-800 hover:text-gray-300"
                         }`

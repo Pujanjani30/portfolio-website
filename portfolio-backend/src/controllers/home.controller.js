@@ -1,5 +1,4 @@
 import { successResponse, errorResponse } from '../utils/http-response.js';
-
 import * as homeService from '../services/home.service.js';
 import { uploadFile } from '../utils/cloudinary.js';
 
