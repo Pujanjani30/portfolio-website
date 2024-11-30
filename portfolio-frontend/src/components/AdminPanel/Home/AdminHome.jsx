@@ -51,6 +51,7 @@ function AdminHome() {
       } catch (error) {
         console.error("Error fetching data:", error);
         errorAlert("Error fetching data.");
+        setLoading(false);
       }
     };
     fetchData();
@@ -309,7 +310,7 @@ function AdminHome() {
                     <div>
                       {values.socials.map((social, index) => (
                         <div key={index} className="flex md:items-center items-start gap-4 mb-4 flex-col md:flex-row flex-wrap">
-                          <div className="flex-1">
+                          <div className="flex-1 w-full">
                             <label className="block text-sm font-medium">Name</label>
                             <Field
                               name={`socials[${index}].label`}
@@ -322,7 +323,7 @@ function AdminHome() {
                               className="text-red-500 text-sm"
                             />
                           </div>
-                          <div className="flex-1">
+                          <div className="flex-1 w-full">
                             <label className="block text-sm font-medium">URL</label>
                             <Field
                               name={`socials[${index}].url`}
@@ -335,7 +336,7 @@ function AdminHome() {
                               className="text-red-500 text-sm"
                             />
                           </div>
-                          <div className="flex-1">
+                          <div className="flex-1 w-full">
                             {/* Icon Selector using react-select */}
                             <label className="block text-sm font-medium">Select Icon</label>
                             <Select
