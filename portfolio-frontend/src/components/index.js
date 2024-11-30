@@ -13,13 +13,14 @@ import Certificates from "./About/Certificates";
 
 import Login from "./AdminPanel/Auth/Login";
 import AdminPanel from "./AdminPanel/AdminPanel";
-import HomeAdmin from "./AdminPanel/Home/HomeAdmin";
-import IntroductionAdmin from './AdminPanel/About/IntroductionAdmin';
-import EducationAdmin from './AdminPanel/About/EducationAdmin';
-import SkillsAdmin from './AdminPanel/About/SkillsAdmin';
-import ExperienceAdmin from './AdminPanel/About/ExperienceAdmin';
-import CertificatesAdmin from './AdminPanel/About/CertificatesAdmin';
-import ProjectsAdmin from "./AdminPanel/Projects/ProjectsAdmin";
+import AdminHome from "./AdminPanel/Home/AdminHome";
+import AdminIntroduction from './AdminPanel/About/AdminIntroduction';
+import AdminEducation from './AdminPanel/About/AdminEducation';
+import AdminSkills from './AdminPanel/About/AdminSkills';
+import AdminExperience from './AdminPanel/About/AdminExperience';
+import AdminCertificates from './AdminPanel/About/AdminCertificates';
+import AdminProjects from "./AdminPanel/Projects/AdminProjects";
+import AdminLogs from "./AdminPanel/Logs/Logs";
 
 import ProtectedRoute from "./ProtectedRoute/ProtectedRoute"
 
@@ -42,13 +43,14 @@ export {
 
   Login,
   AdminPanel,
-  HomeAdmin,
-  IntroductionAdmin,
-  EducationAdmin,
-  SkillsAdmin,
-  ExperienceAdmin,
-  CertificatesAdmin,
-  ProjectsAdmin,
+  AdminHome,
+  AdminIntroduction,
+  AdminEducation,
+  AdminSkills,
+  AdminExperience,
+  AdminCertificates,
+  AdminProjects,
+  AdminLogs,
 
   ProtectedRoute,
 

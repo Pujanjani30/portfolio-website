@@ -1,6 +1,6 @@
 import React from 'react'
 
-function ExperienceAdmin() {
+function AdminExperience() {
   return (
     <div>
       This is Experience menu for admin.
@@ -8,4 +8,4 @@ function ExperienceAdmin() {
   )
 }
 
-export default ExperienceAdmin
+export default AdminExperience;

@@ -21,12 +21,13 @@ function AdminPanel() {
       ],
     },
     { path: "projects", label: "Projects" },
+    { path: "logs", label: "Logs" },
   ];
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen flex-col md:flex-row">
       {/* Sidebar */}
-      <div className="w-64 bg-zinc-900 shadow-[4px_0_10px_-4px_rgba(0,0,0,0.5)] text-white">
+      <div className="w-full md:w-64 bg-zinc-900 shadow-[4px_0_10px_-4px_rgba(0,0,0,0.5)] text-white">
         {/* Profile Section */}
         <div className="p-4 border-b border-gray-700">
           <div className="flex items-center gap-2">
@@ -112,18 +113,17 @@ function AdminPanel() {
             className="px-9 text-white py-2"
             onClick={() => {
               logout();
-              navigate('/admin/login')
+              navigate('/admin/login');
             }}
           >
             <i className="fa-solid fa-right-from-bracket me-2" />
             Logout
           </button>
         </div>
-
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 bg-black p-6">
+      <div className="flex-1 bg-black p-6 overflow-x-auto">
         <Outlet />
       </div>
     </div>

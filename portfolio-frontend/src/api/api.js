@@ -1,7 +1,8 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://portfolio-pujanjani.onrender.com/api/v1';
-// const BASE_URL = 'http://localhost:8000/api/v1';
+const BASE_URL = import.meta.env.DEV
+  ? 'http://localhost:8000/api/v1'
+  : 'https://portfolio-pujanjani.onrender.com/api/v1';
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -76,4 +77,17 @@ const updateHomeDetails = async (data) => {
   }
 }
 
-export { login, logout, getHomeDetails, updateHomeDetails };
+const getLogs = async (page) => {
+  try {
+    setAuthorizationHeader();
+
+    const response = await api.get(`/admin/logs?page=${page}&limit=10`);
+
+    return response.data.data;
+  }
+  catch (error) {
+    throw error?.response?.data?.message || 'An error occurred';
+  }
+};
+
+export { login, logout, getHomeDetails, updateHomeDetails, getLogs };

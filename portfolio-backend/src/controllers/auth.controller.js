@@ -17,7 +17,7 @@ const register = async (req, res) => {
       data: response.user
     })
   } catch (error) {
-    errorResponse(res, error);
+    errorResponse(req, res, error);
   }
 };
 
@@ -34,7 +34,7 @@ const login = async (req, res) => {
       data: response.user
     })
   } catch (error) {
-    errorResponse(res, error);
+    errorResponse(req, res, error);
   }
 };
 

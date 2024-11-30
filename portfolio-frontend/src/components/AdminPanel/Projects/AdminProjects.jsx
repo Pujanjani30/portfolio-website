@@ -1,6 +1,6 @@
 import React from 'react'
 
-function ProjectsAdmin() {
+function AdminProjects() {
   return (
     <div>
       This is Projects menu for admin.
@@ -8,4 +8,4 @@ function ProjectsAdmin() {
   )
 }
 
-export default ProjectsAdmin
+export default AdminProjects;

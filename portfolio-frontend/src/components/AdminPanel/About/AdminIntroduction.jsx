@@ -1,6 +1,6 @@
 import React from 'react'
 
-function IntroductionAdmin() {
+function AdminIntroduction() {
   return (
     <div>
       This is Introduction menu for admin.
@@ -8,4 +8,4 @@ function IntroductionAdmin() {
   )
 }
 
-export default IntroductionAdmin
+export default AdminIntroduction;

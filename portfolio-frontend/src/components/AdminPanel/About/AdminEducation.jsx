@@ -1,6 +1,6 @@
 import React from 'react'
 
-function EducationAdmin() {
+function AdminEducation() {
   return (
     <div>
       This is Education menu for admin.
@@ -8,4 +8,4 @@ function EducationAdmin() {
   )
 }
 
-export default EducationAdmin
+export default AdminEducation;

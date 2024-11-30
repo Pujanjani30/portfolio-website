@@ -1,6 +1,6 @@
 import React from 'react'
 
-function SkillsAdmin() {
+function AdminSkills() {
   return (
     <div>
       This is Skills menu for admin.
@@ -8,4 +8,4 @@ function SkillsAdmin() {
   )
 }
 
-export default SkillsAdmin
+export default AdminSkills;

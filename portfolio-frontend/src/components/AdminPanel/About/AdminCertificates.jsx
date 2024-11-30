@@ -1,6 +1,6 @@
 import React from 'react'
 
-function CertificatesAdmin() {
+function AdminCertificates() {
   return (
     <div>
       This is Certificates menu for admin.
@@ -8,4 +8,4 @@ function CertificatesAdmin() {
   )
 }
 
-export default CertificatesAdmin
+export default AdminCertificates

@@ -12,7 +12,7 @@ const getHomeDetails = async (req, res) => {
       data: response
     })
   } catch (error) {
-    errorResponse(res, error);
+    errorResponse(req, res, error);
   }
 };
 
@@ -42,7 +42,7 @@ const updateHomeDetails = async (req, res) => {
       message: 'Home details updated successfully'
     })
   } catch (error) {
-    errorResponse(res, error);
+    errorResponse(req, res, error);
   }
 };
 

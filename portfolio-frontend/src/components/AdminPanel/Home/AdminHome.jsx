@@ -7,7 +7,7 @@ import { icons } from '../../../utils/icons.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Select from 'react-select';
 
-function HomeAdmin() {
+function AdminHome() {
   const [initialData, setInitialData] = useState({
     name: "",
     position: "",
@@ -30,6 +30,7 @@ function HomeAdmin() {
     )
   }));
 
+  const [loading, setLoading] = useState(true);
   const [isChanged, setIsChanged] = useState(false);
   const [isUpdatingProfilePic, setIsUpdatingProfilePic] = useState(false);
   const [isUpdatingResume, setIsUpdatingResume] = useState(false);
@@ -46,12 +47,22 @@ function HomeAdmin() {
             { label: "LinkedIn", url: "", icon: icons.faLinkedin }
           ],
         });
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+        errorAlert("Error fetching data.");
       }
     };
     fetchData();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <span className="text-xl text-gray-600">Loading...</span>
+      </div>
+    );
+  }
 
   // Handle form submission
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -98,7 +109,7 @@ function HomeAdmin() {
 
   return (
     <div className="max-w-7xl mx-auto p-4 bg-zinc-900 text-white rounded-lg shadow-lg min-h-screen flex flex-col">
-      <h1 className="text-3xl font-semibold mb-6">Edit Home Page Details</h1>
+      <h1 className="lg:text-3xl text-xl font-semibold mb-6">Edit Home Page Details</h1>
 
       <Formik
         enableReinitialize
@@ -166,7 +177,7 @@ function HomeAdmin() {
                 <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
               </div>
 
-              <div className="flex gap-6">
+              <div className="flex gap-6 sm:flex-row flex-col">
 
                 {/* Profile Picture */}
                 <div className="flex-1">
@@ -174,7 +185,7 @@ function HomeAdmin() {
                     Profile Picture
                   </label>
                   {values.profilePic && !isUpdatingProfilePic ? (
-                    <div className="mt-1">
+                    <div className="mt-2">
                       <img
                         src={values.profilePic}
                         alt="Profile Preview"
@@ -297,7 +308,7 @@ function HomeAdmin() {
                   {({ remove, push }) => (
                     <div>
                       {values.socials.map((social, index) => (
-                        <div key={index} className="flex items-center gap-4 mb-4">
+                        <div key={index} className="flex md:items-center items-start gap-4 mb-4 flex-col md:flex-row flex-wrap">
                           <div className="flex-1">
                             <label className="block text-sm font-medium">Name</label>
                             <Field
@@ -388,4 +399,4 @@ function HomeAdmin() {
   );
 }
 
-export default HomeAdmin;
+export default AdminHome;

@@ -10,7 +10,7 @@ const verifyToken = (req, res, next) => {
 
     jwt.verify(auth, process.env.ACCESS_TOKEN_SECRET, (err, decodedData) => {
       if (err) {
-        return res.status(403).json({ status: 403, message: "Invalid Token" });
+        throw new Error("INVALID_TOKEN");
       }
       else {
         req.user = decodedData;
@@ -26,7 +26,7 @@ const verifyToken = (req, res, next) => {
     if (err.name === "TokenExpiredError")
       return res.status(401).json({ status: 401, message: err.message });
 
-    errorResponse(res, err);
+    errorResponse(req, res, err);
   }
 };
 

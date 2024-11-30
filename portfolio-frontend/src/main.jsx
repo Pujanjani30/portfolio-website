@@ -1,18 +1,18 @@
-import App from './App.jsx'
-import './index.css'
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import App from './App.jsx';
+import './index.css';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import {
   createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Outlet, Navigate
 }
-  from 'react-router-dom'
+  from 'react-router-dom';
 import {
   Home, About, ComingSoon, ErrorPage, Introduction, Education, Skills, Experience, Certificates,
-  AdminPanel, HomeAdmin, IntroductionAdmin, EducationAdmin, SkillsAdmin, ExperienceAdmin, CertificatesAdmin,
-  ProjectsAdmin, Login, ProtectedRoute,
+  AdminPanel, AdminHome, AdminIntroduction, AdminEducation, AdminSkills, AdminExperience,
+  AdminCertificates, AdminProjects, AdminLogs, Login, ProtectedRoute,
 }
-  from './components/index.js'
-import UserContextProvider from './context/UserContextProvider.jsx'
+  from './components/index.js';
+import UserContextProvider from './context/UserContextProvider.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -42,15 +42,16 @@ const router = createBrowserRouter(
         </UserContextProvider>
       }>
         <Route index element={<Navigate to='home' replace />} />
-        <Route path="home" element={<HomeAdmin />} />
+        <Route path="home" element={<AdminHome />} />
         <Route path="about" element={<Outlet />}>
-          <Route path="introduction" element={<IntroductionAdmin />} />
-          <Route path="education" element={<EducationAdmin />} />
-          <Route path="skills" element={<SkillsAdmin />} />
-          <Route path="experience" element={<ExperienceAdmin />} />
-          <Route path="certificates" element={<CertificatesAdmin />} />
+          <Route path="introduction" element={<AdminIntroduction />} />
+          <Route path="education" element={<AdminEducation />} />
+          <Route path="skills" element={<AdminSkills />} />
+          <Route path="experience" element={<AdminExperience />} />
+          <Route path="certificates" element={<AdminCertificates />} />
         </Route>
-        <Route path="projects" element={<ProjectsAdmin />} />
+        <Route path="projects" element={<AdminProjects />} />
+        <Route path="logs" element={<AdminLogs />} />
       </Route>
     </Route>
   )

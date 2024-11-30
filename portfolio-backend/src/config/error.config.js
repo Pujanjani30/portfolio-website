@@ -43,7 +43,12 @@ const ERRORS = {
     'CODE': 12,
     'DEFAULT_MESSAGE': 'Something went worng. Please try again.',
     'HTTP_CODE': 500
-  }
+  },
+  "INVALID_TOKEN": {
+    "CODE": 13,
+    "DEFAULT_MESSAGE": "Invalid token.",
+    "HTTP_CODE": 401
+  },
 }
 
 export default ERRORS;
