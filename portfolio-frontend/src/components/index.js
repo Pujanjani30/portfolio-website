@@ -20,7 +20,7 @@ import AdminSkills from './AdminPanel/About/AdminSkills';
 import AdminExperience from './AdminPanel/About/AdminExperience';
 import AdminCertificates from './AdminPanel/About/AdminCertificates';
 import AdminProjects from "./AdminPanel/Projects/AdminProjects";
-import AdminLogs from "./AdminPanel/Logs/Logs";
+import AdminLogs from "./AdminPanel/Logs/Logs.jsx";
 
 import ProtectedRoute from "./ProtectedRoute/ProtectedRoute"
 
