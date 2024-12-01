@@ -6,6 +6,8 @@ import { confirmAlert, successAlert, errorAlert } from '../../../utils/alert.js'
 import { icons } from '../../../utils/icons.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Select from 'react-select';
+import { FileUploadField, FormInput } from "../../common/index.js";
+
 
 function AdminHome() {
   const [initialData, setInitialData] = useState({
@@ -19,6 +21,10 @@ function AdminHome() {
       { label: "LinkedIn", url: "", icon: icons.faLinkedin }
     ],
   });
+  const [loading, setLoading] = useState(true);
+  const [isChanged, setIsChanged] = useState(false);
+  const [isUpdatingProfilePic, setIsUpdatingProfilePic] = useState(false);
+  const [isUpdatingResume, setIsUpdatingResume] = useState(false);
 
   const iconOptions = Object.keys(icons).map(iconKey => ({
     value: iconKey,
@@ -29,11 +35,6 @@ function AdminHome() {
       </div>
     )
   }));
-
-  const [loading, setLoading] = useState(true);
-  const [isChanged, setIsChanged] = useState(false);
-  const [isUpdatingProfilePic, setIsUpdatingProfilePic] = useState(false);
-  const [isUpdatingResume, setIsUpdatingResume] = useState(false);
 
   // Fetch initial data from API
   useEffect(() => {
@@ -55,7 +56,7 @@ function AdminHome() {
       }
     };
     fetchData();
-  }, []);
+  }, [initialData.profilePic, initialData.resume]);
 
   if (loading) {
     return (
@@ -79,20 +80,30 @@ function AdminHome() {
       formData.append("name", values.name);
       formData.append("position", values.position);
       formData.append("email", values.email);
-      if (values.profilePic && typeof values.profilePic !== "string") {
+
+      // Handling profile picture
+      if (values.profilePic instanceof File) {
         formData.append("profilePic", values.profilePic);
+      } else if (values.profilePic) {
+        formData.append("profilePic", values.profilePic); // Existing URL
       } else {
         formData.append("profilePic", ""); // Explicitly indicate removal
       }
-      if (values.resume)
+
+      // Handling resume
+      if (values.resume instanceof File) {
         formData.append("resume", values.resume);
+      } else if (values.resume) {
+        formData.append("resume", values.resume); // Existing URL
+      }
       formData.append("socials", JSON.stringify(values.socials));
 
-      console.log(values.socials);
+      const updatedData = await updateHomeDetails(formData); // Update home details using the provided API function
 
-      await updateHomeDetails(formData); // Update home details using the provided API function
-
+      setInitialData(updatedData); // Update initialData with the updated values
       setIsChanged(false); // Reset form change status after successful submit
+      setIsUpdatingProfilePic(false); // Reset profile picture update status
+      setIsUpdatingResume(false); // Reset resume update status
 
       // Update initialData with the submitted values
       setInitialData(prevData => ({
@@ -139,166 +150,40 @@ function AdminHome() {
 
           return (
             <Form className="space-y-6 flex-grow">
-              {/* Name and Position */}
+              {/* Name, Position and Email */}
               <div className="flex flex-col md:flex-row gap-4">
-                <div className="flex-1">
-                  <label htmlFor="name" className="block text-sm font-medium">
-                    Name
-                  </label>
-                  <Field
-                    name="name"
-                    type="text"
-                    className="mt-1 block w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-                  />
-                  <ErrorMessage name="name" component="div" className="text-red-500 text-sm" />
-                </div>
-                <div className="flex-1">
-                  <label htmlFor="position" className="block text-sm font-medium">
-                    Position
-                  </label>
-                  <Field
-                    name="position"
-                    type="text"
-                    className="mt-1 block w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-                  />
-                  <ErrorMessage name="position" component="div" className="text-red-500 text-sm" />
-                </div>
-              </div>
-
-              {/* Email */}
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium">
-                  Email
-                </label>
-                <Field
-                  name="email"
-                  type="email"
-                  className="mt-1 block w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-                />
-                <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
+                <FormInput label="Name" name="name" type="text" />
+                <FormInput label="Position" name="position" type="text" />
+                <FormInput label="Email" name="email" type="email" />
               </div>
 
               <div className="flex gap-6 sm:flex-row flex-col">
 
                 {/* Profile Picture */}
-                <div className="flex-1">
-                  <label htmlFor="profilePic" className="block text-sm font-medium">
-                    Profile Picture
-                  </label>
-                  {values.profilePic && !isUpdatingProfilePic ? (
-                    <div className="mt-2">
-                      <img
-                        src={values.profilePic}
-                        alt="Profile Preview"
-                        className="w-32 h-32 object-cover rounded-lg"
-                      />
-                      <p className="text-blue-500 mt-2">
-                        <a href={values.profilePic} target="_blank" rel="noopener noreferrer">
-                          View Profile Picture
-                        </a>
-                      </p>
-                      <div className="flex gap-4 mt-2">
-                        <button
-                          type="button"
-                          onClick={() => setIsUpdatingProfilePic(true)}
-                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                        >
-                          Update
-                        </button>
-                        <button
-                          type="button"
-                          onClick={async () => {
-                            const confirm = await confirmAlert("Are you sure you want to remove the profile picture?");
-                            if (confirm.isConfirmed) {
-                              setFieldValue("profilePic", "");
-                            }
-                          }}
-                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="mt-1">
-                      <input
-                        id="profilePic"
-                        name="profilePic"
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                          const file = e.target.files[0];
-                          setFieldValue("profilePic", file);
-                        }}
-                        className="mt-1 block w-full text-sm border border-gray-300 rounded-lg file:border-0 file:px-4 file:py-2 file:bg-blue-500 file:text-white focus:outline-none mb-2"
-                      />
-                      {isUpdatingProfilePic ? (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setIsUpdatingProfilePic(false);
-                            setFieldValue("profilePic", initialData.profilePic);
-                          }}
-                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-                        >
-                          Cancel
-                        </button>
-                      ) : null}
-                    </div>
-                  )}
-                </div>
+                <FileUploadField
+                  label="Profile Picture"
+                  name="profilePic"
+                  value={values.profilePic}
+                  initialValue={initialData.profilePic}
+                  isUpdating={isUpdatingProfilePic}
+                  setIsUpdating={setIsUpdatingProfilePic}
+                  setFieldValue={setFieldValue}
+                  accept="image/*"
+                  showRemoveButton={true}
+                />
 
                 {/* Resume */}
-                <div className="flex-1">
-                  <label htmlFor="resume" className="block text-sm font-medium">
-                    Resume (PDF)
-                  </label>
-                  {values.resume && !isUpdatingResume ? (
-                    <div className="mt-1">
-                      <p className="text-blue-500 mt-2">
-                        <a href={values.resume} target="_blank" rel="noopener noreferrer">
-                          View Resume
-                        </a>
-                      </p>
-                      <div className="flex gap-4 mt-2">
-                        <button
-                          type="button"
-                          onClick={() => setIsUpdatingResume(true)}
-                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                        >
-                          Update
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="mt-1">
-                      <input
-                        id="resume"
-                        name="resume"
-                        type="file"
-                        accept="application/pdf"
-                        onChange={(e) => {
-                          const file = e.target.files[0];
-                          setFieldValue("resume", file);
-                        }}
-                        className="mt-1 block w-full text-sm border border-gray-300 rounded-lg file:border-0 file:px-4 file:py-2 file:bg-blue-500 file:text-white focus:outline-none mb-2"
-                      />
-                      {isUpdatingResume ? (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setIsUpdatingResume(false);
-                            setFieldValue("resume", initialData.resume);
-                          }}
-                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-                        >
-                          Cancel
-                        </button>
-                      ) : null}
-                    </div>
-                  )}
-                  <ErrorMessage name="resume" component="div" className="text-red-500 text-sm" />
-                </div>
+                <FileUploadField
+                  label="Resume (PDF)"
+                  name="resume"
+                  value={values.resume}
+                  initialValue={initialData.resume}
+                  isUpdating={isUpdatingResume}
+                  setIsUpdating={setIsUpdatingResume}
+                  setFieldValue={setFieldValue}
+                  accept="application/pdf"
+                  showRemoveButton={false}
+                />
               </div>
 
 

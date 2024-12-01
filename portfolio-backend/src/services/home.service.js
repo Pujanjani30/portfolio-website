@@ -13,9 +13,9 @@ const updateHomeDetails = async (data) => {
   if (!home) {
     return await Home.create(data);
   }
-  await Home.updateOne({}, data);
+  const updatedHome = await Home.findOneAndUpdate({}, data, { new: true });
 
-  return;
+  return updatedHome;
 };
 
 export { getHomeDetails, updateHomeDetails };

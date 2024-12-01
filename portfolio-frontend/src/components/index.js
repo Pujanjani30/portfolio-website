@@ -2,7 +2,6 @@ import Header from "./Header/Header";
 import Footer from "./Footer/Footer";
 
 import Home from "./Home/Home";
-import DownloadButton from "./DownloadButton/DownloadButton";
 
 import About from "./About/About";
 import Introduction from "./About/Introduction";
@@ -24,7 +23,7 @@ import AdminLogs from "./AdminPanel/ServerLogs/AdminLogs";
 
 import ProtectedRoute from "./ProtectedRoute/ProtectedRoute"
 
-import ComingSoon from "./ComingSoon/ComingSoon";
+import ComingSoon from "./common/ComingSoon";
 import ErrorPage from "./ErrorPage/ErrorPage";
 
 export {
@@ -32,7 +31,6 @@ export {
   Footer,
 
   Home,
-  DownloadButton,
 
   About,
   Introduction,
