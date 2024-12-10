@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 import FormInput from '../../common/FormInput';
-import { getAllProjects, addProject, updateProject, deleteProject } from '../../../api/index.js';
-import { successAlert, errorAlert, confirmAlert } from '../../../utils/alert.js'
+import {
+  getAllProjects, getProjects, addProject, updateProject, deleteProject, reorderProjects
+} from '../../../api/index.js';
+import { successAlert, errorAlert, confirmAlert } from '../../../utils/alert.js';
+import ReorderProjectsModal from './ReorderProjectsModal.jsx';
 
 
 function AdminProjects() {
@@ -11,6 +14,7 @@ function AdminProjects() {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(false);
+  const [showReorderModal, setShowReorderModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,12 +51,14 @@ function AdminProjects() {
         await updateProject(editingProject._id, formData);
         successAlert("Project updated successfully.");
         setShowModal(false);
+        document.body.style.overflow = 'auto';
         setRefresh(!refresh);
       } else {
         await addProject(formData);
         successAlert("Project added successfully.");
       }
       setShowModal(false);
+      document.body.style.overflow = 'auto';
       setRefresh(!refresh);
     } catch (error) {
       console.error("Error adding/updating project:", error);
@@ -82,14 +88,36 @@ function AdminProjects() {
 
   const handleAddProject = () => {
     setEditingProject(null);
-    document.body.style.overflow = 'hidden';
     setShowModal(true);
+    document.body.style.overflow = 'hidden';
   };
 
   const closeModal = () => {
     setShowModal(false);
     document.body.style.overflow = 'auto';
   };
+
+  const handleReorderProjects = async () => {
+    setShowReorderModal(true);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const handleSaveReorder = async (reorderedProjects) => {
+    try {
+      reorderedProjects = reorderedProjects.map((project, index) => {
+        return { id: project._id, sort_order: index + 1 };
+      })
+      await reorderProjects({ projects: reorderedProjects });
+      setShowReorderModal(false);
+      setRefresh(!refresh);
+      document.body.style.overflow = 'auto';
+      successAlert('Projects reordered successfully.');
+    } catch (error) {
+      console.error("Error reordering projects:", error);
+      errorAlert("Error reordering projects.");
+    }
+  };
+
 
   if (loading) {
     return (
@@ -113,7 +141,12 @@ function AdminProjects() {
 
       {/* Project List */}
       <div>
-        <h2 className="text-2xl font-semibold mb-4">Existing Projects</h2>
+        <div className='flex'>
+          <h2 className="text-2xl font-semibold mb-4">Existing Projects</h2>
+          <button className='ml-auto' onClick={handleReorderProjects}>
+            Reorder
+          </button>
+        </div>
         <ul>
           {projects.map((project) => (
             <li
@@ -324,8 +357,21 @@ function AdminProjects() {
             </Formik>
           </div>
         </div>
-      )
-      }
+      )}
+
+      {showReorderModal && (
+        <ReorderProjectsModal
+          visibleProjects={projects
+            .filter((project) => project.isVisible)
+            .sort((a, b) => a.sort_order - b.sort_order)
+          }
+          onClose={() => {
+            setShowReorderModal(false);
+            document.body.style.overflow = 'auto';
+          }}
+          onSave={handleSaveReorder}
+        />
+      )}
     </div >
   );
 }

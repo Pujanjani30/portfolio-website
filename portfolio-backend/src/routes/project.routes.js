@@ -6,6 +6,8 @@ const projectRoutes = (app) => {
   app.get('/admin/project', verifyToken, projectControllers.getAllProjects); // all project
 
   app.post('/admin/project', verifyToken, projectControllers.addProject);
+  app.post('/admin/project/reorder', verifyToken, projectControllers.reorderProjects);
+
   app.put('/admin/project/:id', verifyToken, projectControllers.updateProject);
   app.delete('/admin/project/:id', verifyToken, projectControllers.deleteProject);
 }

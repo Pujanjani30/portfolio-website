@@ -45,6 +45,21 @@ const addProject = async (req, res) => {
   }
 };
 
+const reorderProjects = async (req, res) => {
+  try {
+    const data = Object.assign({}, req.body, req.params, req.query);
+
+    await projectService.reorderProjects(data);
+
+    successResponse({
+      res,
+      message: 'Success',
+    })
+  } catch (error) {
+    errorResponse(req, res, error);
+  }
+};
+
 const updateProject = async (req, res) => {
   try {
     const data = Object.assign({}, req.body, req.params, req.query);
@@ -76,4 +91,11 @@ const deleteProject = async (req, res) => {
   }
 };
 
-export { getAllProjects, getProjects, addProject, updateProject, deleteProject };
+export {
+  getAllProjects,
+  getProjects,
+  addProject,
+  updateProject,
+  deleteProject,
+  reorderProjects
+};

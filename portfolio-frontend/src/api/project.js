@@ -40,6 +40,16 @@ const updateProject = async (id, data) => {
   }
 };
 
+const reorderProjects = async (data) => {
+  try {
+    setAuthorizationHeader();
+    const response = await api.post('/admin/project/reorder', data);
+    return response.data.data;
+  } catch (error) {
+    throw error?.response?.data?.message || "Unexpected error occurred";
+  }
+};
+
 const deleteProject = async (id) => {
   try {
     setAuthorizationHeader();
@@ -50,4 +60,11 @@ const deleteProject = async (id) => {
   }
 };
 
-export { getProjects, getAllProjects, addProject, updateProject, deleteProject };
+export {
+  getProjects,
+  getAllProjects,
+  addProject,
+  updateProject,
+  deleteProject,
+  reorderProjects
+};

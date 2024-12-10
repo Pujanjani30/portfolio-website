@@ -45,6 +45,9 @@ const projectSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
     default: true
+  },
+  sort_order: {
+    type: Number,
   }
 }, { timestamps: true });
 
@@ -52,5 +55,16 @@ projectSchema.path('start_date').validate(function (value) {
   return value <= this.end_date;
 }, 'Start date must be less than or equal to end date.');
 
+projectSchema.pre('save', async function (next) {
+  try {
+    if (this.isNew) {
+      const maxSortOrder = await this.constructor.findOne({}).sort({ sort_order: -1 });
+      this.sort_order = maxSortOrder ? maxSortOrder.sort_order + 1 : 1;
+    }
+  } catch (err) {
+    return next(err);
+  }
+  next();
+});
 
 export default mongoose.model('Project', projectSchema);

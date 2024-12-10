@@ -3,7 +3,7 @@ import Project from '../models/project.model.js';
 const getProjects = async () => {
   const projects = await Project
     .find({ isVisible: true })
-    .sort({ end_date: -1, start_date: -1 });
+    .sort({ sort_order: 1 });
 
   return projects;
 }
@@ -29,6 +29,22 @@ const updateProject = async (data) => {
   return project;
 }
 
+const reorderProjects = async (data) => {
+  let bulkData = [];
+  let projects = data?.projects || [];
+
+  for (const project of projects) {
+    bulkData.push({
+      updateOne: {
+        filter: { _id: project.id },
+        update: { sort_order: project.sort_order }
+      }
+    });
+  }
+
+  return await Project.bulkWrite(bulkData);
+}
+
 const deleteProject = async (data) => {
   const { id } = data;
 
@@ -42,5 +58,6 @@ export {
   getAllProjects,
   addProject,
   updateProject,
-  deleteProject
+  deleteProject,
+  reorderProjects
 };
