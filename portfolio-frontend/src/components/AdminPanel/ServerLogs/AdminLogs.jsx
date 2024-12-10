@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getLogs } from '../../../api/api.js';
+import { getLogs } from '../../../api/index.js';
 import { errorAlert } from '../../../utils/alert.js';
 import LogsPagination from './LogsPagination.jsx';
 

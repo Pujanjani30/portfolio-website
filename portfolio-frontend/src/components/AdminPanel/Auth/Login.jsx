@@ -1,13 +1,15 @@
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../../../api/api.js';
+import { login } from '../../../api/index.js';
 import UserContext from '../../../context/UserContext.js';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const { setUser } = useContext(UserContext);
@@ -61,17 +63,26 @@ export default function SignIn() {
             <label htmlFor="password" className="block text-lg">
               Password
             </label>
-            <div className="mt-2">
+            <div className="relative mt-2">
               <input
                 id="password"
                 name="password"
-                type="password"
+                type={showPassword ? "text" : "password"} // Toggle between password and text
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 autoComplete="current-password"
                 className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm/6 outline-none"
               />
+
+              {/* Show Password Toggle */}
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
+              >
+                {showPassword ? "Hide" : "Show"} {/* Change button text based on the state */}
+              </button>
             </div>
           </div>
 

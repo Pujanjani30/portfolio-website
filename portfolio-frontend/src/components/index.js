@@ -21,6 +21,8 @@ import AdminCertificates from './AdminPanel/About/AdminCertificates';
 import AdminProjects from "./AdminPanel/Projects/AdminProjects";
 import AdminLogs from "./AdminPanel/ServerLogs/AdminLogs";
 
+import Projects from "./Projects/Projects";
+
 import ProtectedRoute from "./ProtectedRoute/ProtectedRoute"
 
 import ComingSoon from "./common/ComingSoon";
@@ -38,6 +40,8 @@ export {
   Skills,
   Experience,
   Certificates,
+
+  Projects,
 
   Login,
   AdminPanel,

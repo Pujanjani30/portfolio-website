@@ -1,13 +1,23 @@
+// React and related hooks
 import React, { useState, useEffect } from "react";
+
+// External packages
 import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
-import { getHomeDetails, updateHomeDetails } from '../../../api/api.js';
+import Select from 'react-select';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+// API calls
+import { getHomeDetails, updateHomeDetails } from '../../../api/index.js';
+
+// Validation schema
 import { HomeAdminValidationSchema } from "../../../schemas/validationSchemas.js";
+
+// utils
 import { confirmAlert, successAlert, errorAlert } from '../../../utils/alert.js';
 import { icons } from '../../../utils/icons.js';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Select from 'react-select';
-import { FileUploadField, FormInput } from "../../common/index.js";
 
+// Common components
+import { FileUploadField, FormInput } from "../../common/index.js";
 
 function AdminHome() {
   const [initialData, setInitialData] = useState({
@@ -121,7 +131,7 @@ function AdminHome() {
 
   return (
     <div className="max-w-7xl mx-auto p-4 bg-zinc-900 text-white rounded-lg shadow-lg min-h-screen flex flex-col">
-      <h1 className="lg:text-3xl text-xl font-semibold mb-6">Edit Home Page Details</h1>
+      <h1 className="lg:text-3xl text-xl font-semibold mb-6">Home Page</h1>
 
       <Formik
         enableReinitialize
@@ -152,9 +162,9 @@ function AdminHome() {
             <Form className="space-y-6 flex-grow">
               {/* Name, Position and Email */}
               <div className="flex flex-col md:flex-row gap-4">
-                <FormInput label="Name" name="name" type="text" />
-                <FormInput label="Position" name="position" type="text" />
-                <FormInput label="Email" name="email" type="email" />
+                <FormInput label="Name" name="name" type="text" value={values.name} />
+                <FormInput label="Position" name="position" type="text" value={values.position} />
+                <FormInput label="Email" name="email" type="email" value={values.email} />
               </div>
 
               <div className="flex gap-6 sm:flex-row flex-col">

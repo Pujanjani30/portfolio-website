@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CodingSvg from '../../assets/person-coding.svg';
-import { getHomeDetails } from '../../api/api.js';
+import { getHomeDetails } from '../../api/index.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { icons } from '../../utils/icons.js';
@@ -44,14 +44,6 @@ const Home = () => {
               </p>
             ))}
           </div>
-
-          {/* <div className="md:col-span-3 md:flex items-center gap-10 hidden">
-          <div className="w-[1px] bg-zinc-500 h-[550px]"></div>
-          <div className="w-[1px] bg-zinc-500 h-[450px]"></div>
-          <div className="w-[1px] bg-zinc-500 h-[350px]"></div>
-          <div className="w-[1px] bg-zinc-500 h-[250px]"></div>
-          <div className="w-[1px] bg-zinc-500 h-[150px]"></div>
-        </div> */}
 
           <div className="grid col-span-11 justify-center items-center md:col-span-11 md:grid-cols-2 md:items-center">
             <div className="text-left md:pt-2">

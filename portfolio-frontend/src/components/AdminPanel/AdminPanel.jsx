@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
 import UserContext from "../../context/UserContext";
-import { logout } from "../../api/api";
+import { logout } from "../../api/index.js";
 
 function AdminPanel() {
   const { user } = useContext(UserContext);

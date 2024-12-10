@@ -7,7 +7,7 @@ import {
 }
   from 'react-router-dom';
 import {
-  Home, About, ComingSoon, ErrorPage, Introduction, Education, Skills, Experience, Certificates,
+  Home, About, Projects, ErrorPage, Introduction, Education, Skills, Experience, Certificates,
   AdminPanel, AdminHome, AdminIntroduction, AdminEducation, AdminSkills, AdminExperience,
   AdminCertificates, AdminProjects, AdminLogs, Login, ProtectedRoute,
 }
@@ -29,7 +29,7 @@ const router = createBrowserRouter(
         <Route path="experience" element={<Experience />} />
         <Route path="certificates" element={<Certificates />} />
       </Route>
-      <Route path="/projects" element={<ComingSoon />} />
+      <Route path="/projects" element={<Projects />} />
 
       <Route path="/admin/login" element={<Login />} />
 
