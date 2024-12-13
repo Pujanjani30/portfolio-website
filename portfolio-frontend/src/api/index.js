@@ -5,6 +5,9 @@ import {
   getProjects, getAllProjects, addProject, updateProject, deleteProject,
   reorderProjects
 } from './project.js';
+import {
+  getSkills, addSkill, updateSkill, deleteSkill, reorderSkills
+} from './skill.js';
 
 export {
   // auth
@@ -22,6 +25,13 @@ export {
   updateProject,
   deleteProject,
   reorderProjects,
+
+  // skill
+  getSkills,
+  addSkill,
+  updateSkill,
+  deleteSkill,
+  reorderSkills,
 
   // logs
   getLogs,

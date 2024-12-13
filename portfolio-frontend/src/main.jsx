@@ -8,7 +8,7 @@ import {
   from 'react-router-dom';
 import {
   Home, About, Projects, ErrorPage, Introduction, Education, Skills, Experience, Certificates,
-  AdminPanel, AdminHome, AdminIntroduction, AdminEducation, AdminSkills, AdminExperience,
+  AdminPanel, AdminHome, AdminEducation, AdminSkills, AdminExperience,
   AdminCertificates, AdminProjects, AdminLogs, Login, ProtectedRoute,
 }
   from './components/index.js';
@@ -44,7 +44,6 @@ const router = createBrowserRouter(
         <Route index element={<Navigate to='home' replace />} />
         <Route path="home" element={<AdminHome />} />
         <Route path="about" element={<Outlet />}>
-          <Route path="introduction" element={<AdminIntroduction />} />
           <Route path="education" element={<AdminEducation />} />
           <Route path="skills" element={<AdminSkills />} />
           <Route path="experience" element={<AdminExperience />} />

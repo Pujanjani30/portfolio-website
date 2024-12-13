@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, Form, Field } from 'formik';
-import FormInput from '../../common/FormInput';
+import { FormInput, ReorderModal } from '../common/index.js';
 import {
   getAllProjects, getProjects, addProject, updateProject, deleteProject, reorderProjects
 } from '../../../api/index.js';
 import { successAlert, errorAlert, confirmAlert } from '../../../utils/alert.js';
-import ReorderProjectsModal from './ReorderProjectsModal.jsx';
 
 
 function AdminProjects() {
@@ -360,16 +359,23 @@ function AdminProjects() {
       )}
 
       {showReorderModal && (
-        <ReorderProjectsModal
-          visibleProjects={projects
+        <ReorderModal
+          items={projects
             .filter((project) => project.isVisible)
             .sort((a, b) => a.sort_order - b.sort_order)
           }
+          title='Reorder Projects'
           onClose={() => {
             setShowReorderModal(false);
             document.body.style.overflow = 'auto';
           }}
           onSave={handleSaveReorder}
+          renderItem={(project) => (
+            <>
+              <span className="text-black">{project.name}</span>
+              <span className="text-sm text-gray-500">Drag to reorder</span>
+            </>
+          )}
         />
       )}
     </div >

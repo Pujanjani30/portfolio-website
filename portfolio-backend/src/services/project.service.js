@@ -48,9 +48,9 @@ const reorderProjects = async (data) => {
 const deleteProject = async (data) => {
   const { id } = data;
 
-  const project = await Project.findByIdAndDelete(id);
+  await Project.findByIdAndDelete(id);
 
-  return project;
+  return true;
 }
 
 export {

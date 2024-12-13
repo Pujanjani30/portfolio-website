@@ -15,8 +15,14 @@ import {
 } from '@dnd-kit/sortable';
 import { SortableItem } from './SortableItem';
 
-const ReorderProjectsModal = ({ visibleProjects, onClose, onSave }) => {
-  const [orderedProjects, setOrderedProjects] = useState(visibleProjects);
+const ReorderModal = ({
+  items,
+  title,
+  onClose,
+  onSave,
+  renderItem, // Function to render each item dynamically
+}) => {
+  const [orderedItems, setOrderedItems] = useState(items);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -29,7 +35,7 @@ const ReorderProjectsModal = ({ visibleProjects, onClose, onSave }) => {
     const { active, over } = event;
 
     if (active.id !== over.id) {
-      setOrderedProjects((items) => {
+      setOrderedItems((items) => {
         const oldIndex = items.findIndex((item) => item._id === active.id);
         const newIndex = items.findIndex((item) => item._id === over.id);
         return arrayMove(items, oldIndex, newIndex);
@@ -41,7 +47,7 @@ const ReorderProjectsModal = ({ visibleProjects, onClose, onSave }) => {
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-xl">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-800">Reorder Projects</h2>
+          <h2 className="text-2xl font-bold text-gray-800">{title}</h2>
           <button onClick={onClose} className="text-gray-600">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -66,15 +72,14 @@ const ReorderProjectsModal = ({ visibleProjects, onClose, onSave }) => {
           onDragEnd={handleDragEnd}
         >
           <SortableContext
-            items={orderedProjects.map((project) => project._id)}
+            items={orderedItems.map((item) => item._id)}
             strategy={verticalListSortingStrategy}
           >
             <ul className="space-y-2">
-              {orderedProjects.map((project) => (
-                <SortableItem key={project._id} id={project._id}>
+              {orderedItems.map((item) => (
+                <SortableItem key={item._id} id={item._id}>
                   <div className="bg-gray-100 p-4 rounded-lg shadow-sm flex items-center justify-between">
-                    <span className='text-black'>{project.name}</span>
-                    <span className="text-sm text-gray-500">Drag to reorder</span>
+                    {renderItem(item)}
                   </div>
                 </SortableItem>
               ))}
@@ -90,7 +95,7 @@ const ReorderProjectsModal = ({ visibleProjects, onClose, onSave }) => {
             Cancel
           </button>
           <button
-            onClick={() => onSave(orderedProjects)}
+            onClick={() => onSave(orderedItems)}
             className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md"
           >
             Save
@@ -101,4 +106,4 @@ const ReorderProjectsModal = ({ visibleProjects, onClose, onSave }) => {
   );
 };
 
-export default ReorderProjectsModal;
+export default ReorderModal;

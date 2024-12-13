@@ -3,7 +3,7 @@ import CodingSvg from '../../assets/person-coding.svg';
 import { getHomeDetails } from '../../api/index.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
-import { icons } from '../../utils/icons.js';
+import { socialIcons } from '../../utils/icons.js';
 import { errorAlert } from '../../utils/alert.js';
 // import { DownloadButton } from '../index.js';
 
@@ -66,7 +66,7 @@ const Home = () => {
 
                 {homeDetails.socials?.map((social, index) => (
                   <a
-                    key={social._id}
+                    key={index}
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -74,7 +74,7 @@ const Home = () => {
                   >
                     {/* Dynamically render the icon */}
                     {social.icon && (
-                      <FontAwesomeIcon icon={icons[social.icon]} />
+                      <FontAwesomeIcon icon={socialIcons[social.icon]} />
                     )}
                     {/* Optional fallback for missing icons */}
                     {!social.icon && <FontAwesomeIcon icon={faLink} />}

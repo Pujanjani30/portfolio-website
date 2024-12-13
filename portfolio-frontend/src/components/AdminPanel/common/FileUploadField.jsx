@@ -1,6 +1,6 @@
 import React from "react";
 import { ErrorMessage } from "formik";
-import { confirmAlert } from "../../utils/alert.js";
+import { confirmAlert } from "../../../utils/alert.js";
 
 const FileUploadField = ({
   label,

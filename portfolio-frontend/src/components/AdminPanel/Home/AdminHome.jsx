@@ -14,10 +14,10 @@ import { HomeAdminValidationSchema } from "../../../schemas/validationSchemas.js
 
 // utils
 import { confirmAlert, successAlert, errorAlert } from '../../../utils/alert.js';
-import { icons } from '../../../utils/icons.js';
+import { socialIcons } from '../../../utils/icons.js';
 
 // Common components
-import { FileUploadField, FormInput } from "../../common/index.js";
+import { FileUploadField, FormInput } from "../common/index.js";
 
 function AdminHome() {
   const [initialData, setInitialData] = useState({
@@ -27,8 +27,8 @@ function AdminHome() {
     profilePic: null,
     resume: null,
     socials: [
-      { label: "GitHub", url: "", icon: icons.faGithub },
-      { label: "LinkedIn", url: "", icon: icons.faLinkedin }
+      { label: "GitHub", url: "", icon: socialIcons.faGithub },
+      { label: "LinkedIn", url: "", icon: socialIcons.faLinkedin }
     ],
   });
   const [loading, setLoading] = useState(true);
@@ -36,11 +36,11 @@ function AdminHome() {
   const [isUpdatingProfilePic, setIsUpdatingProfilePic] = useState(false);
   const [isUpdatingResume, setIsUpdatingResume] = useState(false);
 
-  const iconOptions = Object.keys(icons).map(iconKey => ({
+  const iconOptions = Object.keys(socialIcons).map(iconKey => ({
     value: iconKey,
     label: (
       <div className="flex items-center gap-2">
-        <FontAwesomeIcon icon={icons[iconKey]} className="mr-2" />
+        <FontAwesomeIcon icon={socialIcons[iconKey]} className="mr-2" />
         {iconKey.replace('fa', '')}
       </div>
     )
@@ -54,8 +54,8 @@ function AdminHome() {
         setInitialData({
           ...data,
           socials: data.socials || [
-            { label: "GitHub", url: "", icon: icons.faGithub },
-            { label: "LinkedIn", url: "", icon: icons.faLinkedin }
+            { label: "GitHub", url: "", icon: socialIcons.faGithub },
+            { label: "LinkedIn", url: "", icon: socialIcons.faLinkedin }
           ],
         });
         setLoading(false);
@@ -242,7 +242,7 @@ function AdminHome() {
                               }}
                               getOptionLabel={e => (
                                 <div className="flex items-center gap-2">
-                                  <FontAwesomeIcon icon={icons[e.value]} className="mr-2" />
+                                  <FontAwesomeIcon icon={socialIcons[e.value]} className="mr-2" />
                                   {e.value.replace('fa', '')}
                                 </div>
                               )}

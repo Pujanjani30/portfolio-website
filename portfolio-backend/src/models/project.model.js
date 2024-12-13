@@ -47,7 +47,7 @@ const projectSchema = new mongoose.Schema({
     default: true
   },
   sort_order: {
-    type: Number,
+    type: Number
   }
 }, { timestamps: true });
 

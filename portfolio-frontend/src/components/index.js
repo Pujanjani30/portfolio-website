@@ -13,7 +13,6 @@ import Certificates from "./About/Certificates";
 import Login from "./AdminPanel/Auth/Login";
 import AdminPanel from "./AdminPanel/AdminPanel";
 import AdminHome from "./AdminPanel/Home/AdminHome";
-import AdminIntroduction from './AdminPanel/About/AdminIntroduction';
 import AdminEducation from './AdminPanel/About/AdminEducation';
 import AdminSkills from './AdminPanel/About/AdminSkills';
 import AdminExperience from './AdminPanel/About/AdminExperience';
@@ -46,7 +45,6 @@ export {
   Login,
   AdminPanel,
   AdminHome,
-  AdminIntroduction,
   AdminEducation,
   AdminSkills,
   AdminExperience,
