@@ -1,17 +1,9 @@
 import React, { useState } from 'react';
 import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
+  DndContext, closestCenter, KeyboardSensor, PointerSensor, TouchSensor, useSensor, useSensors,
 } from '@dnd-kit/core';
 import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
+  arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { SortableItem } from './SortableItem';
 
@@ -25,7 +17,8 @@ const ReorderModal = ({
   const [orderedItems, setOrderedItems] = useState(items);
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor), // For desktop devices
+    useSensor(TouchSensor), // For mobile devices
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
