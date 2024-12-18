@@ -204,7 +204,7 @@ function AdminSkills() {
     <div className="max-w-7xl mx-auto p-4 bg-zinc-900 text-white rounded-lg shadow-lg min-h-screen flex flex-col">
       <h1 className="lg:text-3xl text-xl font-semibold mb-6">Skills</h1>
 
-      {/* Add Project Button */}
+      {/* Add Skill Button */}
       <button
         onClick={handleAddSkill}
         className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md mb-6"
@@ -237,7 +237,7 @@ function AdminSkills() {
 
 
             <Formik
-              enableReinitialize={true} // Ensures the form is reinitialized when `editingProject` changes
+              enableReinitialize={true}
               initialValues={{
                 skill_name: editingSkill?.skill_name || '',
                 skill_icon: editingSkill?.skill_icon || '',
@@ -323,7 +323,7 @@ function AdminSkills() {
                       type="submit"
                       className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md"
                     >
-                      {editingSkill ? 'Update Skill' : 'Add Skill'}
+                      {editingSkill ? 'Update' : 'Add'}
                     </button>
                   </div>
                 </Form>

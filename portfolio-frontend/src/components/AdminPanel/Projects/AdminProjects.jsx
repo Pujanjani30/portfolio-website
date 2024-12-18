@@ -149,7 +149,7 @@ function AdminProjects() {
         <ul>
           {projects.map((project) => (
             <li
-              key={project.id}
+              key={project._id}
               className="flex flex-wrap md:flex-row justify-between items-center px-6 py-3 mb-4 bg-zinc-800 rounded-md shadow-sm"
             >
               <div className="bg-zinc-800">
@@ -348,7 +348,7 @@ function AdminProjects() {
                       type="submit"
                       className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md"
                     >
-                      {editingProject ? 'Update Project' : 'Add Project'}
+                      {editingProject ? 'Update' : 'Add'}
                     </button>
                   </div>
                 </Form>

@@ -15,7 +15,8 @@ function About() {
   return (
     <div className="flex flex-col md:grid md:grid-cols-12 min-h-screen">
       {/* Sidebar */}
-      <div className="md:col-span-2 bg-zinc-900 shadow-[4px_0_10px_-4px_rgba(0,0,0,0.5)] md:h-screen sticky top-0 md:pt-7">
+      <div className="md:col-span-2 bg-zinc-900 shadow-[4px_0_10px_-4px_rgba(0,0,0,0.5)] 
+      md:h-screen sticky top-0 md:pt-7 z-50">
         <h2 className="text-xl md:text-2xl pb-3 px-5 text-white">About</h2>
         <ul className="text-blue-500">
           {menuItems.map((item) => (

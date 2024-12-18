@@ -9,7 +9,7 @@ const Introduction = () => {
         </h1>
         <p className="text-zinc-300 text-sm md:text-base leading-relaxed mb-4">
           Welcome to my portfolio! I am a passionate and driven{" "}
-          <span className="text-blue-500 font-semibold">backend developer</span> with a strong foundation in web
+          <span className="text-blue-500 font-semibold">Node.js developer</span> with a strong foundation in web
           technologies and a growing expertise in building scalable, efficient, and secure web applications. Currently,
           I am in my third year of{" "}
           <span className="text-blue-500 font-semibold">

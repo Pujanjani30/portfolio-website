@@ -3,6 +3,7 @@ import homeRoutes from './home.routes.js';
 import logsRoutes from './logs.routes.js';
 import projectRoutes from './project.routes.js';
 import skillRoutes from './skill.routes.js';
+import educationRoutes from './education.routes.js';
 
 export default [
   authRoutes,
@@ -10,4 +11,5 @@ export default [
   logsRoutes,
   projectRoutes,
   skillRoutes,
+  educationRoutes,
 ];

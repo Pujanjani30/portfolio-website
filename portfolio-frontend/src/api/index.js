@@ -8,6 +8,9 @@ import {
 import {
   getSkills, addSkill, updateSkill, deleteSkill, reorderSkills
 } from './skill.js';
+import {
+  getEducations, addEducation, updateEducation, deleteEducation
+} from './education.js';
 
 export {
   // auth
@@ -32,6 +35,12 @@ export {
   updateSkill,
   deleteSkill,
   reorderSkills,
+
+  // education
+  getEducations,
+  addEducation,
+  updateEducation,
+  deleteEducation,
 
   // logs
   getLogs,
