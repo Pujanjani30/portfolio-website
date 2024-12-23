@@ -35,10 +35,10 @@ function AdminEducation() {
         degree: values.degree,
         field: values.field,
         startYear: values.startYear,
-        endYear: values.endYear,
+        endYear: values?.endYear,
         grade: values?.grade,
-        desc: values?.desc
-
+        desc: values?.desc,
+        isCurrent: values?.isCurrent
       };
 
       if (editingEducation) {
@@ -126,7 +126,7 @@ function AdminEducation() {
                 <h3 className="text-xl font-semibold text-white mb-2">{education.school}</h3>
 
                 <div className="text-sm text-gray-400 mb-2">
-                  <span>{education.startYear} - {education.endYear}</span>
+                  <span>{education.startYear} - {education.isCurrent ? 'Present' : education.endYear}</span>
                 </div>
 
                 <p className="text-sm text-gray-300 mb-2">
@@ -192,7 +192,8 @@ function AdminEducation() {
                 startYear: editingEducation?.startYear || null,
                 endYear: editingEducation?.endYear || null,
                 grade: editingEducation?.grade || '',
-                desc: editingEducation?.desc || ''
+                desc: editingEducation?.desc || '',
+                isCurrent: editingEducation?.isCurrent || false
               }}
               onSubmit={(values) => handleSubmit(values)}
             >
@@ -239,16 +240,38 @@ function AdminEducation() {
                         className="col-span-1"
                         labelStyle='text-black'
                       />
-                      <FormInput
-                        label="End Year"
-                        name="endYear"
-                        type="number"
-                        value={values.endYear}
-                        onChange={handleChange}
-                        className="col-span-1"
-                        labelStyle='text-black'
-                      />
+
+                      {!values.isCurrent &&
+                        <FormInput
+                          label="End Year"
+                          name="endYear"
+                          type="number"
+                          value={values?.endYear}
+                          onChange={handleChange}
+                          className="col-span-1"
+                          labelStyle='text-black'
+                        />
+                      }
                     </div>
+
+                    <Field
+                      name="isCurrent"
+                      type="checkbox"
+                      className="text-black"
+                    >
+                      {({ field }) => (
+                        <label className="flex items-center">
+                          <input
+                            type="checkbox"
+                            {...field}
+                            className="mr-2"
+                            checked={values.isCurrent}
+                            onChange={handleChange}
+                          />
+                          <span className='text-black'>Currently studying</span>
+                        </label>
+                      )}
+                    </Field>
 
                     <FormInput
                       label="Grade"

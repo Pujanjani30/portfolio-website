@@ -8,7 +8,7 @@ import { faSchool } from "@fortawesome/free-solid-svg-icons";
 // API Calls
 import { getEducations } from '../../api/index.js';
 
-const Projects = () => {
+const Education = () => {
   const [educations, setEducations] = useState({});
   const [loading, setLoading] = useState(true);
 
@@ -55,7 +55,7 @@ const Projects = () => {
                 <h3 className="text-xl font-semibold text-white mb-2">{education.school}</h3>
 
                 <div className="text-sm text-gray-400 mb-2">
-                  <span>{education.startYear} - {education.endYear}</span>
+                  <span>{education.startYear} - {education.isCurrent ? 'Present' : education.endYear}</span>
                 </div>
 
 
@@ -82,4 +82,4 @@ const Projects = () => {
   );
 };
 
-export default Projects;
+export default Education;

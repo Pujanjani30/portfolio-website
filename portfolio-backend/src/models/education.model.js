@@ -31,7 +31,11 @@ const educationSchema = new mongoose.Schema({
   desc: {
     type: String,
     trim: true
-  }
+  },
+  isCurrent: {
+    type: Boolean,
+    default: false,
+  },
 }, { timestamps: true });
 
 export default mongoose.model('Education', educationSchema);

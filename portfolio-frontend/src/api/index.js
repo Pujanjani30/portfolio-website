@@ -11,6 +11,9 @@ import {
 import {
   getEducations, addEducation, updateEducation, deleteEducation
 } from './education.js';
+import {
+  getExperiences, addExperience, updateExperience, deleteExperience
+} from './experience.js';
 
 export {
   // auth
@@ -41,6 +44,12 @@ export {
   addEducation,
   updateEducation,
   deleteEducation,
+
+  // experience
+  getExperiences,
+  addExperience,
+  updateExperience,
+  deleteExperience,
 
   // logs
   getLogs,

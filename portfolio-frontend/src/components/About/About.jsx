@@ -4,10 +4,9 @@ import { NavLink, Outlet, useLocation } from 'react-router-dom';
 function About() {
   const menuItems = [
     { path: 'introduction', label: 'Introduction' },
-    { path: 'education', label: 'Education' },
     { path: 'skills', label: 'Skills' },
+    { path: 'education', label: 'Education' },
     { path: 'experience', label: 'Experience' },
-    { path: 'certificates', label: 'Certificates' },
   ];
 
   const location = useLocation();

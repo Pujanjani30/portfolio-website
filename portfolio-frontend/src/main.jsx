@@ -7,9 +7,9 @@ import {
 }
   from 'react-router-dom';
 import {
-  Home, About, Projects, ErrorPage, Introduction, Education, Skills, Experience, Certificates,
+  Home, About, Projects, ErrorPage, Introduction, Education, Skills, Experience,
   AdminPanel, AdminHome, AdminEducation, AdminSkills, AdminExperience,
-  AdminCertificates, AdminProjects, AdminLogs, Login, ProtectedRoute,
+  AdminProjects, AdminLogs, Login, ProtectedRoute,
 }
   from './components/index.js';
 import UserContextProvider from './context/UserContextProvider.jsx';
@@ -27,7 +27,6 @@ const router = createBrowserRouter(
         <Route path="education" element={<Education />} />
         <Route path="skills" element={<Skills />} />
         <Route path="experience" element={<Experience />} />
-        <Route path="certificates" element={<Certificates />} />
       </Route>
       <Route path="/projects" element={<Projects />} />
 
@@ -47,7 +46,6 @@ const router = createBrowserRouter(
           <Route path="education" element={<AdminEducation />} />
           <Route path="skills" element={<AdminSkills />} />
           <Route path="experience" element={<AdminExperience />} />
-          <Route path="certificates" element={<AdminCertificates />} />
         </Route>
         <Route path="projects" element={<AdminProjects />} />
         <Route path="logs" element={<AdminLogs />} />

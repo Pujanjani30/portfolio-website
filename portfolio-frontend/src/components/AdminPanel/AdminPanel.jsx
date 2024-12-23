@@ -13,10 +13,9 @@ function AdminPanel() {
     {
       category: "About",
       items: [
-        { path: "about/education", label: "Education" },
         { path: "about/skills", label: "Skills" },
+        { path: "about/education", label: "Education" },
         { path: "about/experience", label: "Experience" },
-        { path: "about/certificates", label: "Certificates" },
       ],
     },
     { path: "projects", label: "Projects" },

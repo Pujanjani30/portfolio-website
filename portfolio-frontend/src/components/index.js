@@ -8,7 +8,6 @@ import Introduction from "./About/Introduction";
 import Education from "./About/Education";
 import Skills from "./About/Skills";
 import Experience from "./About/Experience";
-import Certificates from "./About/Certificates";
 
 import Login from "./AdminPanel/Auth/Login";
 import AdminPanel from "./AdminPanel/AdminPanel";
@@ -16,7 +15,6 @@ import AdminHome from "./AdminPanel/Home/AdminHome";
 import AdminEducation from './AdminPanel/About/AdminEducation';
 import AdminSkills from './AdminPanel/About/AdminSkills';
 import AdminExperience from './AdminPanel/About/AdminExperience';
-import AdminCertificates from './AdminPanel/About/AdminCertificates';
 import AdminProjects from "./AdminPanel/Projects/AdminProjects";
 import AdminLogs from "./AdminPanel/ServerLogs/AdminLogs";
 
@@ -38,7 +36,6 @@ export {
   Education,
   Skills,
   Experience,
-  Certificates,
 
   Projects,
 
@@ -48,7 +45,6 @@ export {
   AdminEducation,
   AdminSkills,
   AdminExperience,
-  AdminCertificates,
   AdminProjects,
   AdminLogs,
 

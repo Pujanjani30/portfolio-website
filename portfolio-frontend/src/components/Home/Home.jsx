@@ -48,7 +48,7 @@ const Home = () => {
           <div className="grid col-span-11 justify-center items-center md:col-span-11 md:grid-cols-2 md:items-center">
             <div className="text-left md:pt-2">
               <h2 className="text-xl">Hello! I am</h2>
-              <h1 className="text-4xl lg:text-6xl font-bold">{homeDetails.name}</h1>
+              <h1 className="text-4xl lg:text-6xl font-bold">Pujan Jani</h1>
               <p className="text-2xl mt-3">I am a <span className="text-blue-400">{homeDetails.position}</span></p>
 
               {/* <DownloadButton fileUrl={homeDetails.resume} fileName="PujanJaniResume.pdf" /> */}
