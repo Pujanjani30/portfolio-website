@@ -38,6 +38,16 @@ app.use(express.urlencoded({ extended: true }));
 // sanitize request data to prevent MongoDB query injection
 app.use(mongoSanitize());
 
+// health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'healthy',
+    uptime: process.uptime(),
+    timestamp: Date.now(),
+    environment: process.env.NODE_ENV || 'development',
+  });
+});
+
 // api routes
 app.use('/api/v1', createApi());
 
