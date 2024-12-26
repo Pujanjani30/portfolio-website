@@ -15,6 +15,9 @@ import './utils/errorHandler.js';
 // api routes setup
 import createApi from './api/v1/index.js';
 
+// Initialize cron jobs
+import './cron/index.js';
+
 // environment vars
 const PORT = process.env.PORT || 8000;
 
