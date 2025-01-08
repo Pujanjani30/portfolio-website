@@ -9,7 +9,7 @@ const Loading = () => {
         </span>
       </div>
       <div className="flex items-center space-x-2">
-        <div className="w-5 h-5 border-3 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+        <div className="w-5 h-5 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
         <span className="text-xl text-white">Loading...</span>
       </div>
     </div>
