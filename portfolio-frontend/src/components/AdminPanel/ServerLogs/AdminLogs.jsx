@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getLogs } from '../../../api/index.js';
 import { errorAlert } from '../../../utils/alert.js';
 import LogsPagination from './LogsPagination.jsx';
+import { Loading } from '../../common/index.js';
 
 const AdminLogs = () => {
   const [logs, setLogs] = useState([]);
@@ -58,11 +59,7 @@ const AdminLogs = () => {
   };
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <span className="text-xl text-gray-600">Loading...</span>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (

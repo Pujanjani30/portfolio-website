@@ -5,6 +5,7 @@ import {
   getEducations, addEducation, updateEducation, deleteEducation
 } from '../../../api/index.js';
 import { successAlert, errorAlert, confirmAlert } from '../../../utils/alert.js';
+import { Loading } from '../../common/index.js';
 
 function AdminEducation() {
   const [educations, setEducations] = useState([]);
@@ -92,11 +93,7 @@ function AdminEducation() {
   };
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <span className="text-xl text-gray-600">Loading...</span>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (

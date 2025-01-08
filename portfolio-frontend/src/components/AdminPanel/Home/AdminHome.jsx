@@ -18,6 +18,7 @@ import { socialIcons } from '../../../utils/icons.js';
 
 // Common components
 import { FileUploadField, FormInput } from "../common/index.js";
+import { Loading } from '../../common/index.js';
 
 function AdminHome() {
   const [initialData, setInitialData] = useState({
@@ -69,11 +70,7 @@ function AdminHome() {
   }, [initialData.profilePic, initialData.resume]);
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <span className="text-xl text-gray-600">Loading...</span>
-      </div>
-    );
+    return <Loading />;
   }
 
   // Handle form submission

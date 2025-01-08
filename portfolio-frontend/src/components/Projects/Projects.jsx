@@ -8,6 +8,9 @@ import { faGithub } from "@fortawesome/free-brands-svg-icons";
 // API Calls
 import { getProjects } from '../../api/index.js';
 
+// Components
+import { Loading } from '../common/index.js';
+
 const Projects = () => {
   const [projects, setProjects] = useState({});
   const [loading, setLoading] = useState(true);
@@ -36,9 +39,7 @@ const Projects = () => {
       {/* Main Content */}
       {
         loading ? (
-          <div className="flex justify-center items-center h-screen">
-            <span className="text-xl text-gray-600">Loading...</span>
-          </div>
+          <Loading />
         ) : (
           <main className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-4 md:pl-9">
             {/* Example Project Section */}

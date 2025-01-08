@@ -8,6 +8,9 @@ import { faBriefcase } from "@fortawesome/free-solid-svg-icons";
 // API Calls
 import { getExperiences } from '../../api/index.js';
 
+// Components
+import { Loading } from '../common/index.js';
+
 const Experience = () => {
   const [Experiences, setExperiences] = useState({});
   const [loading, setLoading] = useState(true);
@@ -33,9 +36,7 @@ const Experience = () => {
       <h1 className="text-2xl font-bold mb-8">Experiences</h1>
       {/* Main Content */}
       {loading ? (
-        <div className="flex justify-center items-center h-screen">
-          <span className="text-xl text-gray-600">Loading...</span>
-        </div>
+        <Loading />
       ) : (
         <main className="grid grid-cols-1 gap-6 pl-4 md:pl-9">
           {Experiences.map((Experience, index) => (

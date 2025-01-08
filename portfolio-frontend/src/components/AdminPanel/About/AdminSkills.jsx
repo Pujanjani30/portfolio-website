@@ -8,6 +8,7 @@ import { successAlert, errorAlert, confirmAlert } from '../../../utils/alert.js'
 import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { techIcons } from '../../../utils/icons.js';
+import { Loading } from '../../common/index.js';
 
 function AdminSkills() {
   const [technicalSkills, setTechnicalSkills] = useState([]);
@@ -138,11 +139,7 @@ function AdminSkills() {
 
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <span className="text-xl text-gray-600">Loading...</span>
-      </div>
-    );
+    return <Loading />;
   }
 
   const renderSkillList = (skills, type) => (

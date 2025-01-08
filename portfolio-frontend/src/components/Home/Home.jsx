@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { socialIcons } from '../../utils/icons.js';
 import { errorAlert } from '../../utils/alert.js';
+import { Loading } from '../common/index.js';
 // import { DownloadButton } from '../index.js';
 
 const Home = () => {
@@ -32,9 +33,7 @@ const Home = () => {
   return (
     <div className="bg-zinc-900 text-white min-h-[90.5vh]">
       {loading ? (
-        <div className="flex justify-center items-center h-screen">
-          <span className="text-xl text-gray-600">Loading...</span>
-        </div>
+        <Loading />
       ) : (
         <div className="grid grid-cols-12">
           <div className="col-span-1 w-1/3 md:col-span-1 p-3 text-gray-500 text-right">

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getSkills } from '../../api/index.js';
 import { techIcons } from '../../utils/icons.js';
+import { Loading } from '../common/index.js';
 
 function Skills() {
   const [technicalSkills, setTechnicalSkills] = useState([]);
@@ -30,11 +31,7 @@ function Skills() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <span className="text-xl text-gray-600">Loading...</span>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (
